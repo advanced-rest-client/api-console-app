@@ -1,0 +1,61 @@
+<!--
+@license
+Copyright 2016 The Advanced REST client authors <arc@mulesoft.com>
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/raml-documentation-viewer/raml-documentation-viewer.html">
+<!--
+The documentation viewer in the console app.
+-->
+<dom-module id="api-console-docs">
+  <template>
+    <style>
+     :host {
+      display: block;
+    }
+
+    *[hidden] {
+      display: none !important;
+    }
+    </style>
+    <raml-documentation-viewer selected-path="{{path}}" aware="raml"></raml-documentation-viewer>
+  </template>
+  <script>
+  Polymer({
+    is: 'api-console-docs',
+
+    properties: {
+      /**
+       * Current path to the resource / method / documentation.
+       * This is updated when the user select a specific node in the RAML JSON structure that
+       * represents one of this properties. When changed from the outside (by the app) it will
+       * update the view to display selected path.
+       */
+      path: {
+        type: String,
+        notify: true
+      }
+    },
+
+    listeners: {
+      'tryit-requested': '_tryitHandler'
+    },
+
+    // Handler for the `tryit` event fired in the `raml-docs-method-viewer` element.
+    _tryitHandler: function() {
+      this.fire('navigate', {
+        url: '/request/' + this.path
+      });
+    }
+  });
+  </script>
+</dom-module>

@@ -1,0 +1,26 @@
+{
+  "name": "api-console-application",
+  "version": "0.0.1",
+  "description": "An application that demonstrates how the API console element works",
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "scripts": {
+    "build": "gulp"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-env": "^1.1.1",
+    "babel-preset-latest": "^6.16.0",
+    "del": "^2.2.1",
+    "gulp": "gulpjs/gulp#4.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-if": "^2.0.1",
+    "gulp-imagemin": "^3.0.1",
+    "merge-stream": "^1.0.0",
+    "plylog": "^0.4.0",
+    "polymer-build": "^0.4.0"
+  },
+  "engines": {
+    "node": ">=4.0"
+  },
+  "private": true
+}

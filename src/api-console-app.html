@@ -1,0 +1,366 @@
+<!--
+@license
+Copyright 2016 The Advanced REST client authors <arc@mulesoft.com>
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/raml-js-parser/raml-js-parser.html">
+<link rel="import" href="../bower_components/raml-aware/raml-aware.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="api-console-styles.html">
+
+<dom-module id="api-console-app">
+  <template>
+    <style>
+     :host {
+      --app-primary-color: #00A2DF;
+      --app-secondary-color: black;
+      background-color: #fff;
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+    }
+
+    .toolbar {
+      --paper-input-container-label: {
+        color: white;
+      }
+      --paper-input-container-label-focus: {
+        color: white;
+      }
+      --paper-input-container-label-floating: {
+        color: white;
+      }
+      --paper-input-container-input: {
+        color: white;
+      }
+      --paper-dropdown-menu-icon: {
+        color: white;
+      }
+      --paper-input-container-color: #fff;
+      --paper-dropdown-menu-input: {
+        color: white;
+      }
+    }
+
+    app-header {
+      color: #fff;
+      background-color: var(--app-primary-color);
+    }
+
+    .loader {
+      padding: 16px;
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+      @apply(--layout-fit);
+      background-color: #fff;
+      z-index: 2;
+      margin-top: 64px;
+    }
+
+    *[hidden] {
+      display: none !important;
+    }
+
+    paper-progress {
+      display: block;
+      width: 100%;
+      --paper-progress-active-color: rgba(255, 255, 255, 0.5);
+      --paper-progress-container-color: transparent;
+    }
+
+    </style>
+    <app-location route="{{route}}"></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+    <app-route route="{{subroute}}" pattern="/:path" data="{{subrouteData}}">
+    </app-route>
+
+    <div class="loader" hidden$="[[!working]]">
+      <paper-spinner active="[[working]]"></paper-spinner>
+      <p>Loading RAML content. Please wait a sec...</p>
+    </div>
+
+    <app-header-layout has-scrolling-region>
+      <app-header condenses reveals effects="waterfall">
+        <app-toolbar>
+          <div main-title>API console</div>
+          <paper-dropdown-menu label="RAML definition" class="toolbar">
+            <paper-listbox id="urlSelector" class="dropdown-content" selected="0" on-iron-select="_apiSelected" class="toolbar">
+              <paper-item data-url="https://raw.githubusercontent.com/advanced-rest-client/raml-example-api/master/api.raml">ARC example</paper-item>
+              <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/world-music-api/api.raml">World Music API</paper-item>
+              <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/alainn-mobile-shopping/api.raml">Álainn Cosmetics Mobile Orders API</paper-item>
+              <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/mobile-order-api/api.raml">Mobile Order API</paper-item>
+              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/19695/versions/24854/files/root">FlightStats</paper-item>
+              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/6308/versions/6302/files/root">Twitter API</paper-item>
+              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/12164/versions/12574/files/root">Google Drive</paper-item>
+              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7965/versions/8129/files/root">Facebook</paper-item>
+              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8077/versions/8266/files/root">Zendesk</paper-item>
+              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8086/versions/8276/files/root">LinkedIn</paper-item>
+              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7195/versions/7257/files/root">Google Contacts API</paper-item>
+              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7782/versions/7918/files/root">GitHub API</paper-item>
+              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8111/versions/8305/files/root">SalesForce</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+          <paper-progress hidden$="[[!loadingFragment]]" indeterminate bottom-item></paper-progress>
+        </app-toolbar>
+      </app-header>
+      <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+        <api-console-docs name="docs" path="{{subrouteData.path}}"></api-console-docs>
+        <api-console-request name="request" page="[[page]]" path="{{subrouteData.path}}"></api-console-request>
+        <api-console-404 name="view404"></api-console-404>
+      </iron-pages>
+    </app-header-layout>
+
+    <raml-js-parser normalize-raml></raml-js-parser>
+    <raml-aware raml="[[raml]]" scope="raml"></raml-aware>
+    <paper-toast text=""></paper-toast>
+  </template>
+  <script>
+  Polymer({
+    is: 'api-console-app',
+
+    properties: {
+      page: {
+        type: String,
+        reflectToAttribute: true,
+        observer: '_pageChanged'
+      },
+      /**
+       * An URL to the RAML file definition.
+       * If the `auto` attribute is set then after the URL change it wil load the RAML
+       * definition automatically.
+       */
+      src: {
+        type: String,
+        observer: '_apiSrcChanged'
+      },
+      // App initialization params - query string from the URL
+      initParams: Object,
+      // Will be set to true when parsing the RAML file.
+      working: {
+        type: Boolean,
+        value: false,
+        readOnly: true,
+        notify: true
+      },
+      // RAML as the JSON produced by the parser. The `.specificvation` part of the output.
+      raml: {
+        type: Object,
+        notify: true,
+        readOnly: true
+      },
+      // List of parser errors.
+      errors: {
+        type: Array,
+        notify: true,
+        readOnly: true
+      },
+      // True if the element and child elements has been loaded.
+      _loaded: Boolean,
+      // Will be set to true if the RAML file has been loaded.
+      _hasRaml: {
+        type: Boolean,
+        value: false,
+        computed: '_computeHasRaml(_loaded, raml)'
+      },
+      // Set by the child element. True whem the user selected any of the RAML data.
+      ramlHasSelected: Boolean,
+      // True when the currently selected object is a method. This only matters when displaying
+      // the request panel
+      isMethodSelected: Boolean,
+      // True when the framgent page is loaded.
+      loadingFragment: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    listeners: {
+      'navigate': '_navigate'
+    },
+
+    observers: [
+      '_routePageChanged(routeData.page)',
+      '_ramlChanged(raml)'
+    ],
+
+    attached: function() {
+      this._readInitParams();
+      this._loaded = true;
+      this._apiSrcChanged(this.src);
+    },
+
+    _routePageChanged: function(page) {
+      if (page === '/' || page === '') {
+        page = 'docs';
+        this.routeData.page = 'docs';
+      }
+      this.page = page || 'docs';
+    },
+
+    _pageChanged: function(page) {
+      // Load page import on demand. Show 404 page if fails
+      var resolvedPageUrl = this.resolveUrl(page + '.html');
+      this.loadingFragment = true;
+      this.importHref(resolvedPageUrl, this._pageLoaded, this._showPage404, true);
+    },
+
+    _showPage404: function() {
+      this.page = 'view404';
+      this.loadingFragment = false;
+    },
+
+    _pageLoaded: function() {
+      this.loadingFragment = false;
+    },
+
+    _apiSelected: function(e) {
+      var url;
+      if (!this._apiInitialSelected) {
+        url = this.checkExternalApi();
+        if (url) {
+          this.appendApiSrc(url);
+          this._apiInitialSelected = true;
+          return;
+        }
+      }
+      this._apiInitialSelected = true;
+      url = e.detail.item.dataset.url;
+      this.src = url;
+    },
+
+    checkExternalApi: function() {
+      if (!this.initParams) {
+        return false;
+      }
+      if ('api' in this.initParams) {
+        return this.initParams.api;
+      }
+      return false;
+    },
+
+    _readInitParams: function() {
+      var query = location.href.substr(location.href.indexOf('?') + 1);
+      if (!query) {
+        return;
+      }
+      var params = {};
+      query.split('&').forEach(function(part) {
+        var parts = part.split('=');
+        params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1] || '');
+      });
+      this.initParams = params;
+    },
+
+    appendApiSrc: function(url) {
+      var item = document.createElement('paper-item');
+      item.dataset.url = url;
+      item.innerText = url;
+      this.$.urlSelector.appendChild(item);
+
+      if (this.$.urlSelector.children) {
+        this.$.urlSelector.selected = this.$.urlSelector.children.length - 1;
+      }
+      this._updateCustomApi = true;
+    },
+
+    _ramlChanged: function(raml) {
+      if (!this._updateCustomApi) {
+        return;
+      }
+      this._updateCustomApi = true;
+      // debugger;
+      var title = raml.title;
+      if (!title) {
+        return;
+      }
+      if (!this.$.urlSelector.children) {
+        return;
+      }
+      var item = this.$.urlSelector.children[this.$.urlSelector.children.length - 1];
+      item.innerText = title;
+    },
+
+    // Downloads and parses the RAML definition for given `src`.
+    _apiSrcChanged: function(url) {
+      if (!url || !this._loaded) {
+        return;
+      }
+      this._setWorking(true);
+      this._setRaml(undefined);
+      this._setErrors(undefined);
+      var detail = {
+        'url': url
+      };
+      var event = this.fire('parse-raml-url', detail);
+      if (!event.detail.raml) {
+        this._toastMessage('Internal error. RAML parser not in the DOM.');
+        console.error('Event did not contained raml property.');
+        return;
+      }
+      this._handleRamlEvent(event);
+    },
+
+    // Handles the parser event response.
+    _handleRamlEvent: function(event) {
+      var context = this;
+      event.detail.raml
+        .then(function(result) {
+          context._setRaml(result[1].specification);
+          context._setErrors(result[1].errors);
+          context.fire('raml-ready', {
+            raml: result[1].specification,
+            errors: result[1].errors
+          });
+          context._setWorking(false);
+        })
+        .catch(function(e) {
+          context._toastMessage('Parser error: ' + e.message);
+          context._setWorking(false);
+          console.warn('API error', e);
+        });
+    },
+    // Displays a toast with a `message`.
+    _toastMessage: function(message) {
+      var toast = this.$$('paper-toast');
+      toast.text = message;
+      toast.opened = true;
+    },
+    // Compute is the element received and parsed RAML file.
+    _computeHasRaml: function(_loaded, raml) {
+      return !!(_loaded && !!raml);
+    },
+
+    // An event handler for tap / click on navigation events.
+    _navigate: function(e) {
+      this.set('route.path', e.detail.url);
+    }
+  });
+  </script>
+</dom-module>
