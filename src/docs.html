@@ -53,7 +53,7 @@ The documentation viewer in the console app.
     // Handler for the `tryit` event fired in the `raml-docs-method-viewer` element.
     _tryitHandler: function() {
       this.fire('navigate', {
-        url: '/request/' + this.path
+        url: '/request/' + (this.path ? this.path.replace(/\./g, '-') : '')
       });
     }
   });

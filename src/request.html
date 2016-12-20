@@ -13,6 +13,11 @@ the License.
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/raml-request-panel/raml-request-panel.html">
+<link rel="import" href="../bower_components/raml-summary-view/raml-summary-view.html">
+<link rel="import" href="../bower_components/raml-aware/raml-aware.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/arc-icons/arc-icons.html">
 <!--
 The request panel in the console app.
 -->
@@ -40,13 +45,27 @@ The request panel in the console app.
     .breadcrumbs .separator::before {
       content: '·';
     }
+
+    .selector-nav {
+      margin-bottom: 12px;
+    }
+
     </style>
-    <div class="breadcrumbs">
+    <!-- <div class="breadcrumbs">
       <a href="#" data-place="/docs" on-tap="_navigate">Documentation</a>
       <span class="separator"></span>
       <a>Try it</a>
-    </div>
-    <raml-request-panel is-method="{{isMethod}}" path="{{path}}" aware="raml"></raml-request-panel>
+    </div> -->
+    <!-- <raml-summary-view raml="[[raml]]" narrow="{{narrow}}" narrow-width="{{narrowWidth}}"></raml-summary-view> -->
+    <raml-request-panel is-method="{{isMethod}}" path="{{path}}" aware="raml">
+      <div nav class="selector-nav">
+        <paper-button on-tap="_navigateDocs">
+          <iron-icon icon="arc:chevron-left"></iron-icon>
+          Full documentation
+        </paper-button>
+      </div>
+    </raml-request-panel>
+    <raml-aware raml="{{raml}}" scope="raml"></raml-aware>
   </template>
   <script>
     Polymer({
@@ -72,7 +91,15 @@ The request panel in the console app.
         },
         // Currently selected page. If current page is `request` and `isMethod` is false then it
         // will fire the `navidate` event.
-        page: String
+        page: String,
+        // If true it will display a narrow layout.
+        narrow: {
+          type: Boolean
+        },
+        // Current RAML object
+        raml: {
+          type: Object
+        }
       },
 
       observers: [
@@ -91,12 +118,18 @@ The request panel in the console app.
           }
         }, 5);
       },
+      // Fire an event to parent element to navigate back to the docs.
+      _navigateDocs: function() {
+        this.fire('navigate', {
+          url: '/docs/' + this.path.replace(/\./g, '-')
+        });
+      },
 
       // An event handler for tap / click on navigation events.
       _navigate: function(e) {
         if (e.target.dataset && e.target.dataset.place) {
           this.fire('navigate', {
-            url: '/docs/' + this.path
+            url: '/docs/' + this.path.replace(/\./g, '-')
           });
         }
       }

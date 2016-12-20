@@ -95,11 +95,18 @@ the License.
       --paper-progress-container-color: transparent;
     }
 
+    iron-pages {
+      height: 100%;
+    }
+
+    iron-pages > * {
+      height: 100%;
+    }
+
     </style>
     <app-location route="{{route}}"></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
-    <app-route route="{{subroute}}" pattern="/:path" data="{{subrouteData}}">
-    </app-route>
+    <app-route route="{{subroute}}" pattern="/:path" data="{{subrouteData}}"></app-route>
 
     <div class="loader" hidden$="[[!working]]">
       <paper-spinner active="[[working]]"></paper-spinner>
@@ -131,8 +138,8 @@ the License.
         </app-toolbar>
       </app-header>
       <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-        <api-console-docs name="docs" path="{{subrouteData.path}}"></api-console-docs>
-        <api-console-request name="request" page="[[page]]" path="{{subrouteData.path}}"></api-console-request>
+        <api-console-docs name="docs" path="{{path}}"></api-console-docs>
+        <api-console-request name="request" page="[[page]]" path="{{path}}"></api-console-request>
         <api-console-404 name="view404"></api-console-404>
       </iron-pages>
     </app-header-layout>
@@ -198,7 +205,9 @@ the License.
       loadingFragment: {
         type: Boolean,
         value: false
-      }
+      },
+
+      path: String
     },
 
     listeners: {
@@ -207,7 +216,9 @@ the License.
 
     observers: [
       '_routePageChanged(routeData.page)',
-      '_ramlChanged(raml)'
+      '_ramlChanged(raml)',
+      '_urlPathChanged(subrouteData.path)',
+      '_pathChanged(path)'
     ],
 
     attached: function() {
@@ -360,6 +371,30 @@ the License.
     // An event handler for tap / click on navigation events.
     _navigate: function(e) {
       this.set('route.path', e.detail.url);
+    },
+
+    _urlPathChanged: function(path) {
+      if (!path) {
+        this.set('path', '');
+        return;
+      }
+      var parsedPath = path.replace(/\-/g, '.');
+      if (parsedPath !== this.path) {
+        this.set('path', parsedPath);
+        console.log('setting path', parsedPath);
+      }
+    },
+
+    _pathChanged: function(path) {
+      if (!path) {
+        this.set('subrouteData.path', '');
+        return;
+      }
+      var parsedPath = path.replace(/\./g, '-');
+      if (parsedPath !== this.subrouteData.path) {
+        this.set('subrouteData.path', parsedPath);
+        // console.log('setting soubroute path', parsedPath);
+      }
     }
   });
   </script>
