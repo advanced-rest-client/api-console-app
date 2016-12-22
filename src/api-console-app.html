@@ -26,10 +26,15 @@ the License.
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/raml-js-parser/raml-js-parser.html">
+<link rel="import" href="../bower_components/raml-path-to-object/raml-path-to-object.html">
+<link rel="import" href="../bower_components/raml-path-selector/raml-path-selector.html">
 <link rel="import" href="../bower_components/raml-aware/raml-aware.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
 <link rel="import" href="api-console-styles.html">
 
 <dom-module id="api-console-app">
@@ -38,13 +43,19 @@ the License.
      :host {
       --app-primary-color: #00A2DF;
       --app-secondary-color: black;
-      background-color: #fff;
+      --app-header-background-front-layer: yellow;
+
       display: block;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      top: 0;
+    }
+
+    app-toolbar,
+    app-header {
+      background-color:  var(--app-primary-color);
+      color: #fff;
+    }
+
+    app-header paper-icon-button {
+      --paper-icon-button-ink-color: white;
     }
 
     .toolbar {
@@ -67,11 +78,6 @@ the License.
       --paper-dropdown-menu-input: {
         color: white;
       }
-    }
-
-    app-header {
-      color: #fff;
-      background-color: var(--app-primary-color);
     }
 
     .loader {
@@ -113,40 +119,82 @@ the License.
       <p>Loading RAML content. Please wait a sec...</p>
     </div>
 
-    <app-header-layout has-scrolling-region>
-      <app-header condenses reveals effects="waterfall">
-        <app-toolbar>
-          <div main-title>API console</div>
-          <paper-dropdown-menu label="RAML definition" class="toolbar">
-            <paper-listbox id="urlSelector" class="dropdown-content" selected="0" on-iron-select="_apiSelected" class="toolbar">
-              <paper-item data-url="https://raw.githubusercontent.com/advanced-rest-client/raml-example-api/master/api.raml">ARC example</paper-item>
-              <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/world-music-api/api.raml">World Music API</paper-item>
-              <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/alainn-mobile-shopping/api.raml">Álainn Cosmetics Mobile Orders API</paper-item>
-              <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/mobile-order-api/api.raml">Mobile Order API</paper-item>
-              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/19695/versions/24854/files/root">FlightStats</paper-item>
-              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/6308/versions/6302/files/root">Twitter API</paper-item>
-              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/12164/versions/12574/files/root">Google Drive</paper-item>
-              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7965/versions/8129/files/root">Facebook</paper-item>
-              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8077/versions/8266/files/root">Zendesk</paper-item>
-              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8086/versions/8276/files/root">LinkedIn</paper-item>
-              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7195/versions/7257/files/root">Google Contacts API</paper-item>
-              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7782/versions/7918/files/root">GitHub API</paper-item>
-              <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8111/versions/8305/files/root">SalesForce</paper-item>
-            </paper-listbox>
-          </paper-dropdown-menu>
-          <paper-progress hidden$="[[!loadingFragment]]" indeterminate bottom-item></paper-progress>
-        </app-toolbar>
-      </app-header>
-      <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
-        <api-console-docs name="docs" path="{{path}}"></api-console-docs>
-        <api-console-request name="request" page="[[page]]" path="{{path}}"></api-console-request>
-        <api-console-404 name="view404"></api-console-404>
-      </iron-pages>
-    </app-header-layout>
+    <app-drawer-layout fullbleed responsive-width="860px">
+      <!-- Drawer content -->
+      <app-drawer id="drawer">
+        <app-toolbar class="drawer-title">API console</app-toolbar>
+        <raml-path-selector
+        narrow="[[narrow]]"
+        raml="[[raml]]"
+        selected-path="{{path}}"
+        resources-only="[[isRequestPanel]]"
+        no-resource-selection="[[isRequestPanel]]"
+        force-wide-layout
+        opened></raml-path-selector>
+      </app-drawer>
+
+      <!-- Main content -->
+      <app-header-layout has-scrolling-region>
+        <app-header condenses reveals effects="waterfall">
+          <app-toolbar>
+            <paper-icon-button icon="arc:menu" drawer-toggle></paper-icon-button>
+            <div main-title>[[raml.title]]</div>
+            <paper-dropdown-menu label="Example APIs" class="toolbar">
+              <paper-listbox id="urlSelector" class="dropdown-content" selected="0" on-iron-select="_apiSelected" class="toolbar">
+                <paper-item data-url="https://raw.githubusercontent.com/advanced-rest-client/raml-example-api/master/api.raml">ARC example</paper-item>
+                <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/world-music-api/api.raml">World Music API</paper-item>
+                <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/alainn-mobile-shopping/api.raml">Álainn Cosmetics Mobile Orders API</paper-item>
+                <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/mobile-order-api/api.raml">Mobile Order API</paper-item>
+                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/19695/versions/24854/files/root">FlightStats</paper-item>
+                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/6308/versions/6302/files/root">Twitter API</paper-item>
+                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/12164/versions/12574/files/root">Google Drive</paper-item>
+                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7965/versions/8129/files/root">Facebook</paper-item>
+                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8077/versions/8266/files/root">Zendesk</paper-item>
+                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8086/versions/8276/files/root">LinkedIn</paper-item>
+                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7195/versions/7257/files/root">Google Contacts API</paper-item>
+                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7782/versions/7918/files/root">GitHub API</paper-item>
+                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8111/versions/8305/files/root">SalesForce</paper-item>
+                <paper-item data-url="custom">Custom</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+            <paper-progress hidden$="[[!loadingFragment]]" indeterminate bottom-item></paper-progress>
+          </app-toolbar>
+        </app-header>
+        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+          <api-console-docs narrow="{{narrow}}" name="docs"
+            selected-object="[[selectedObject]]"
+            selected-parent="[[selectedParent]]"
+            path="{{path}}"></api-console-docs>
+          <api-console-request narrow="{{narrow}}" name="request" page="[[page]]"
+            selected-object="[[selectedObject]]"
+            selected-parent="[[selectedParent]]"
+            path="{{path}}"></api-console-request>
+          <api-console-404 name="view404"></api-console-404>
+        </iron-pages>
+      </app-header-layout>
+    </app-drawer-layout>
 
     <raml-js-parser normalize-raml></raml-js-parser>
     <raml-aware raml="[[raml]]" scope="raml"></raml-aware>
+    <raml-path-to-object
+      raml="[[raml]]"
+      selected-path="{{path}}"
+      selected-object="{{selectedObject}}"
+      selected-parent="{{selectedParent}}"
+      is-method="{{isMethod}}"
+      is-resource="{{isResource}}"
+      is-documentation="{{isDocumentation}}"></raml-path-to-object>
     <paper-toast text=""></paper-toast>
+    <paper-dialog id="ramlFileUrlDialog" on-iron-overlay-closed="_ramlUrlDialogClosed">
+      <h2>RAML file address</h2>
+      <div>
+        <paper-input id="ramlFileUrl" autofocus label="Enter RAML file web address"></paper-input>
+      </div>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm>Accept</paper-button>
+      </div>
+    </paper-dialog>
   </template>
   <script>
   Polymer({
@@ -207,11 +255,49 @@ the License.
         value: false
       },
 
-      path: String
+      path: String,
+      // If true it will display a narrow layout.
+      narrow: {
+        type: Boolean,
+        notify: true
+      },
+      // Selected object in the navigation menu and parsed by the
+      // `raml-path-selector` element
+      selectedObject: Object,
+      // A parent endpoint of selected method object (if any).
+      selectedParent: Object,
+      // True when current selection is a method
+      isMethod: {
+        type: Boolean,
+        value: false
+      },
+      // True when current selection is a resource
+      isResource: {
+        type: Boolean,
+        value: false
+      },
+      // True when current selection is a documentation node
+      isDocumentation: {
+        type: Boolean,
+        value: false
+      },
+      // True when anything is selected
+      hasSelection: {
+        type: Boolean,
+        value: false,
+        computed: '_computeHasSelection(isMethod,isResource,isDocumentation)'
+      },
+      // Computed value, true if current page is the request panel
+      isRequestPanel: {
+        type: Boolean,
+        value: false,
+        computed: '_computeRequestPanel(page)'
+      }
     },
 
     listeners: {
-      'navigate': '_navigate'
+      'navigate': '_navigate',
+      'app-drawer-transitioned': '_onDraawerTransitionEnd'
     },
 
     observers: [
@@ -233,6 +319,10 @@ the License.
         this.routeData.page = 'docs';
       }
       this.page = page || 'docs';
+
+      if (!this.$.drawer.persistent) {
+        this.$.drawer.close();
+      }
     },
 
     _pageChanged: function(page) {
@@ -263,6 +353,10 @@ the License.
       }
       this._apiInitialSelected = true;
       url = e.detail.item.dataset.url;
+      if (url === 'custom') {
+        this.$.ramlFileUrlDialog.opened = true;
+        return;
+      }
       this.src = url;
     },
 
@@ -299,23 +393,6 @@ the License.
         this.$.urlSelector.selected = this.$.urlSelector.children.length - 1;
       }
       this._updateCustomApi = true;
-    },
-
-    _ramlChanged: function(raml) {
-      if (!this._updateCustomApi) {
-        return;
-      }
-      this._updateCustomApi = true;
-      // debugger;
-      var title = raml.title;
-      if (!title) {
-        return;
-      }
-      if (!this.$.urlSelector.children) {
-        return;
-      }
-      var item = this.$.urlSelector.children[this.$.urlSelector.children.length - 1];
-      item.innerText = title;
     },
 
     // Downloads and parses the RAML definition for given `src`.
@@ -393,7 +470,66 @@ the License.
       var parsedPath = path.replace(/\./g, '-');
       if (parsedPath !== this.subrouteData.path) {
         this.set('subrouteData.path', parsedPath);
-        // console.log('setting soubroute path', parsedPath);
+      }
+    },
+
+    _onDraawerTransitionEnd: function(e) {
+      e = Polymer.dom(e);
+      var el = this.$$('app-header');
+      if (e.rootTarget.opened && this.narrow) {
+        el.style.zIndex = 0;
+      } else {
+        el.style.zIndex = 1;
+      }
+    },
+
+    // Computes a boolean value if the user selected anything in the path selector.
+    _computeHasSelection: function(isMethod, isResource, isDocumentation) {
+      return !!(isMethod || isResource || isDocumentation);
+    },
+
+    // Resets the path then the RAML object change
+    _ramlChanged: function(raml) {
+      this._ramlChangedName(raml);
+      if (!raml) {
+        return this.set('path', '');
+      }
+      if (raml.documentation && raml.documentation.length) {
+        return this.set('path', 'documentation.0');
+      }
+      if (raml.resources && raml.resources.length) {
+        return this.set('path', 'resources.0');
+      }
+    },
+    // Updates toolbar main title after the RAML file is loaded.
+    // This will be the API name.
+    _ramlChangedName: function(raml) {
+      if (!this._updateCustomApi || !raml) {
+        return;
+      }
+      this._updateCustomApi = false;
+      var title = raml.title;
+      if (!title) {
+        return;
+      }
+      if (!this.$.urlSelector.children) {
+        return;
+      }
+      var item = this.$.urlSelector.children[this.$.urlSelector.children.length - 1];
+      item.innerText = title;
+    },
+    // Returns true if the  `page` is the request panel.
+    _computeRequestPanel: function(page) {
+      return page === 'request';
+    },
+
+    _ramlUrlDialogClosed: function(e) {
+      if (e.detail.canceled) {
+        return;
+      }
+      var url = this.$.ramlFileUrl.value;
+      if (url) {
+        this.appendApiSrc(url);
       }
     }
   });

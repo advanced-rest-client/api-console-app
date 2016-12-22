@@ -18,6 +18,7 @@ The API Console main stylesheet.
 It is a Polymer's custom style element. It will propagate variables and mixins on all elements;
 -->
 <style is="custom-style">
+
 :root {
   /* Theme */
   --primary-color: #00A2DF;
@@ -45,6 +46,20 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   }
     /* Mixin applied to all code blocks that highlights schemas / types / etc. All code block uses the `prism-theme-default`. */
   --code-block: {}
+  --code-mirror: {
+    background-color: #f5f2f0;
+  }
+  --arc-code-mirror-background-color: #f5f2f0;
+  --code-mirror-editor: {
+    background-color: #f5f2f0;
+    z-index: 0;
+    display: block;
+  }
+
+  --code-mirror-wrapper: {
+    display: block;
+    height: 100%;
+  };
 
   --form-label: {
     font-weight: 500;
@@ -72,10 +87,25 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     background-color: transparent;
   }
   --raml-request-panel-navigation: {
-    background-color: #EEEEEE;
     margin-right: 12px;
     border-right: 1px #e5e5e5 solid;
     @apply(--shadow-elevation-2dp);
+  }
+
+  --raml-request-panel-drawer: {
+    margin-top: 72px;
+  }
+
+  --raml-request-panel-drawer-narrow: {
+    margin-top: 0;
+  }
+
+  --app-drawer-content-container: {
+    background-color: #EEEEEE;
+  }
+
+  --raml-request-panel-navigation-narrow: {
+    @apply(--shadow-elevation-4dp);
   }
   --raml-request-url-editor: {
     margin: 12px 0;

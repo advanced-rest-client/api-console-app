@@ -18,6 +18,8 @@ the License.
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/arc-icons/arc-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
 <!--
 The request panel in the console app.
 -->
@@ -28,43 +30,12 @@ The request panel in the console app.
       display: block;
     }
 
-    *[hidden] {
-      display: none !important;
-    }
-
-    .breadcrumbs {
-      display: block;
-      padding: 16px 12px;
-    }
-
-    .breadcrumbs .separator {
-      display: inline-block;
-      margin: 0 4px;
-    }
-
-    .breadcrumbs .separator::before {
-      content: '·';
-    }
-
-    .selector-nav {
-      margin-bottom: 12px;
-    }
-
     </style>
-    <!-- <div class="breadcrumbs">
-      <a href="#" data-place="/docs" on-tap="_navigate">Documentation</a>
-      <span class="separator"></span>
-      <a>Try it</a>
-    </div> -->
-    <!-- <raml-summary-view raml="[[raml]]" narrow="{{narrow}}" narrow-width="{{narrowWidth}}"></raml-summary-view> -->
-    <raml-request-panel is-method="{{isMethod}}" path="{{path}}" aware="raml">
-      <div nav class="selector-nav">
-        <paper-button on-tap="_navigateDocs">
-          <iron-icon icon="arc:chevron-left"></iron-icon>
-          Full documentation
-        </paper-button>
-      </div>
-    </raml-request-panel>
+    <paper-button on-tap="_navigateDocs">
+      <iron-icon icon="arc:chevron-left"></iron-icon>
+      Full documentation
+    </paper-button>
+    <raml-request-panel narrow="{{narrow}}" method="{{selectedObject}}" parent-endpoint="[[selectedParent]]" path="{{path}}"></raml-request-panel>
     <raml-aware raml="{{raml}}" scope="raml"></raml-aware>
   </template>
   <script>
@@ -82,19 +53,15 @@ The request panel in the console app.
           type: String,
           notify: true
         },
-        /**
-         * Value passed from the `raml-request-panel`, true if current selected object is the
-         * method
-         */
-        isMethod: {
-          type: Boolean
-        },
-        // Currently selected page. If current page is `request` and `isMethod` is false then it
-        // will fire the `navidate` event.
-        page: String,
+        // Selected object in the navigation menu and parsed by the
+        // `raml-path-selector` element
+        selectedObject: Object,
+        // A parent endpoint of selected method object (if any).
+        selectedParent: Object,
         // If true it will display a narrow layout.
         narrow: {
-          type: Boolean
+          type: Boolean,
+          notify: true
         },
         // Current RAML object
         raml: {
@@ -113,7 +80,7 @@ The request panel in the console app.
         this.async(function() {
           if (!this.path.match(/^.*\.methods\.\d+$/)) {
             this.fire('navigate', {
-              url: '/docs/' + this.path
+              url: '/docs/' + this.path.replace(/\./g, '-')
             });
           }
         }, 5);

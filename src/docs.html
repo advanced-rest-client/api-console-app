@@ -19,15 +19,15 @@ The documentation viewer in the console app.
 <dom-module id="api-console-docs">
   <template>
     <style>
-     :host {
+    :host {
       display: block;
     }
-
-    *[hidden] {
-      display: none !important;
-    }
     </style>
-    <raml-documentation-viewer selected-path="{{path}}" aware="raml"></raml-documentation-viewer>
+    <raml-documentation-viewer
+      aware="raml"
+      selected-object="[[selectedObject]]"
+      selected-parent="[[selectedParent]]"
+      path="{{path}}"></raml-documentation-viewer>
   </template>
   <script>
   Polymer({
@@ -43,7 +43,12 @@ The documentation viewer in the console app.
       path: {
         type: String,
         notify: true
-      }
+      },
+      // Selected object in the navigation menu and parsed by the
+      // `raml-path-selector` element
+      selectedObject: Object,
+      // A parent endpoint of selected method object (if any).
+      selectedParent: Object
     },
 
     listeners: {
