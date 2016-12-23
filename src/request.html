@@ -16,10 +16,10 @@ the License.
 <link rel="import" href="../bower_components/raml-summary-view/raml-summary-view.html">
 <link rel="import" href="../bower_components/raml-aware/raml-aware.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/arc-icons/arc-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-
 <!--
 The request panel in the console app.
 -->
@@ -35,8 +35,15 @@ The request panel in the console app.
       <iron-icon icon="arc:chevron-left"></iron-icon>
       Full documentation
     </paper-button>
-    <raml-request-panel narrow="{{narrow}}" method="{{selectedObject}}" parent-endpoint="[[selectedParent]]" path="{{path}}"></raml-request-panel>
+    <raml-request-panel
+      narrow="{{narrow}}"
+      raml="[[raml]]"
+      method="{{selectedObject}}"
+      parent-endpoint="[[selectedParent]]"
+      path="{{path}}"
+      redirect-url="[[redirectUrl]]"></raml-request-panel>
     <raml-aware raml="{{raml}}" scope="raml"></raml-aware>
+    <paper-toast id="noAuth" text="The required authorization is not set." duration="3000"></paper-toast>
   </template>
   <script>
     Polymer({
@@ -63,28 +70,40 @@ The request panel in the console app.
           type: Boolean,
           notify: true
         },
-        // Current RAML object
+        // The RAML definition JSON object
         raml: {
           type: Object
-        }
+        },
+        // OAuth2 redirect URL
+        redirectUrl: String
       },
 
-      observers: [
-        '_isMethodSelectedChanged(isMethod)'
-      ],
-
-      _isMethodSelectedChanged: function(isMethod) {
-        if (isMethod) {
-          return;
-        }
-        this.async(function() {
-          if (!this.path.match(/^.*\.methods\.\d+$/)) {
-            this.fire('navigate', {
-              url: '/docs/' + this.path.replace(/\./g, '-')
-            });
-          }
-        }, 5);
+      listeners: {
+        'api-console-request': '_apiRequested'
       },
+
+      ready: function() {
+        var a = document.createElement('a');
+        a.href = '/bower_components/oauth-authorization/oauth-popup.html';
+        this.redirectUrl = a.href;
+      },
+
+      // observers: [
+      //   '_isMethodSelectedChanged(isMethod)'
+      // ],
+      //
+      // _isMethodSelectedChanged: function(isMethod) {
+      //   if (isMethod) {
+      //     return;
+      //   }
+      //   this.async(function() {
+      //     if (!this.path.match(/^.*\.methods\.\d+$/)) {
+      //       this.fire('navigate', {
+      //         url: '/docs/' + this.path.replace(/\./g, '-')
+      //       });
+      //     }
+      //   }, 5);
+      // },
       // Fire an event to parent element to navigate back to the docs.
       _navigateDocs: function() {
         this.fire('navigate', {
@@ -92,12 +111,29 @@ The request panel in the console app.
         });
       },
 
-      // An event handler for tap / click on navigation events.
-      _navigate: function(e) {
-        if (e.target.dataset && e.target.dataset.place) {
-          this.fire('navigate', {
-            url: '/docs/' + this.path.replace(/\./g, '-')
-          });
+      // // An event handler for tap / click on navigation events.
+      // _navigate: function(e) {
+      //   if (e.target.dataset && e.target.dataset.place) {
+      //     this.fire('navigate', {
+      //       url: '/docs/' + this.path.replace(/\./g, '-')
+      //     });
+      //   }
+      // },
+      /**
+       * A handler for the API call.
+       * This handler will only check if there is authorization required
+       * and if the user is authorizaed.
+       */
+      _apiRequested: function(event) {
+        var so = this.selectedObject;
+        if (so && so.securedBy && so.securedBy.length) {
+          if (!this.authorizationMethod || !this.authorizationSettings) {
+            // check if headers ahs the authorization value.
+            if (!event.detail.headers ||
+              !/^authorization\s?:\s?.+$/im.test(event.detail.headers)) {
+              this.$.noAuth.opened = true;
+            }
+          }
         }
       }
     });

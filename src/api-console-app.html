@@ -109,6 +109,10 @@ the License.
       height: 100%;
     }
 
+    #ramlFileUrl {
+      min-width: 320px;
+    }
+
     </style>
     <app-location route="{{route}}"></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
@@ -491,8 +495,19 @@ the License.
     // Resets the path then the RAML object change
     _ramlChanged: function(raml) {
       this._ramlChangedName(raml);
+      if (!this._initialRamlLoaded && !raml) {
+        return;
+      }
       if (!raml) {
         return this.set('path', '');
+      }
+
+      if (!this._initialRamlLoaded) {
+        this._initialRamlLoaded = true;
+        if (this.path) {
+          // Prohibits path change if it was set in the URL.
+          return;
+        }
       }
       if (raml.documentation && raml.documentation.length) {
         return this.set('path', 'documentation.0');
@@ -524,7 +539,8 @@ the License.
     },
 
     _ramlUrlDialogClosed: function(e) {
-      if (e.detail.canceled) {
+      if (e.detail.canceled || !e.detail.confirmed) {
+        this.$.urlSelector.selected = 0;
         return;
       }
       var url = this.$.ramlFileUrl.value;

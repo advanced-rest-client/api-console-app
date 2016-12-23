@@ -15,6 +15,7 @@
     "manifest.json",
     "bower_components/webcomponentsjs/webcomponents-lite.min.js",
     "bower_components/codemirror/mode/javascript/**.js ",
-    "bower_components/arc-definitions/definitions.json"
+    "bower_components/arc-definitions/definitions.json",
+    "bower_components/oauth-authorization/oauth-popup.html"
   ]
 }
