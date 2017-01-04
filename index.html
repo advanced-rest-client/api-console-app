@@ -47,7 +47,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="msapplication-tap-highlight" content="no">
 
     <script>
-      // Setup Polymer options
       window.Polymer = {
         dom: 'shadow',
         lazyRegister: true
@@ -68,9 +67,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
 
         var webComponentsSupported = (
-          'registerElement' in document
-          && 'import' in document.createElement('link')
-          && 'content' in document.createElement('template')
+          'registerElement' in document &&
+          'import' in document.createElement('link') &&
+          'content' in document.createElement('template')
         );
 
         if (!webComponentsSupported) {
@@ -91,9 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
       }
     </script>
-
     <link rel="import" href="/src/api-console-app.html">
-
     <style>
     html,
     body {
@@ -105,7 +102,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       font-family: 'Roboto', 'Noto', sans-serif;
       line-height: 1.5;
       min-height: 100vh;
-      /*background-color: #eeeeee;*/
     }
     </style>
   </head>
