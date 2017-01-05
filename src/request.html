@@ -13,13 +13,15 @@ the License.
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/raml-request-panel/raml-request-panel.html">
-<link rel="import" href="../bower_components/raml-summary-view/raml-summary-view.html">
+<link rel="import" href="../bower_components/response-view/response-view.html">
 <link rel="import" href="../bower_components/raml-aware/raml-aware.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/arc-icons/arc-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/fetch-polyfill/fetch-polyfill.html">
+
 <!--
 The request panel in the console app.
 -->
@@ -41,8 +43,12 @@ The request panel in the console app.
       method="{{selectedObject}}"
       parent-endpoint="[[selectedParent]]"
       path="{{path}}"
-      redirect-url="[[redirectUrl]]"></raml-request-panel>
-    
+      redirect-url="[[redirectUrl]]"
+      request="{{request}}"
+      response="{{response}}"></raml-request-panel>
+    <template is="dom-if" if="[[_computeOpenResponsePanel(request, response)]]">
+      <response-view request="[[request]]" response="[[response]]" is-xhr></response-view>
+    </template>
     <raml-aware raml="{{raml}}" scope="raml"></raml-aware>
     <paper-toast id="noAuth" text="The required authorization is not set." duration="3000"></paper-toast>
   </template>
@@ -76,7 +82,17 @@ The request panel in the console app.
           type: Object
         },
         // OAuth2 redirect URL
-        redirectUrl: String
+        redirectUrl: String,
+        /**
+         * Created by the transport `Request` object as defined in the Fetch
+         * API spec.
+         */
+        request: Request,
+        /**
+         * Created by the transport the `Response` object as defined in the
+         * Fetch API spec.
+         */
+        response: Response
       },
 
       listeners: {
@@ -136,6 +152,10 @@ The request panel in the console app.
             }
           }
         }
+      },
+
+      _computeOpenResponsePanel: function(request, response) {
+        return !!(request && response);
       }
     });
   </script>
