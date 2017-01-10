@@ -7,6 +7,9 @@
     "rewrites": [{
       "source": "**",
       "destination": "/index.html"
+    }, {
+      "source": "bower_components/oauth-authorization/oauth-popup.html*",
+      "destination": "/bower_components/oauth-authorization/oauth-popup.html"
     }],
     "ignore": [
       "firebase.json",

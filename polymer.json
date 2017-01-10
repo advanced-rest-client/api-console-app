@@ -16,6 +16,9 @@
     "bower_components/webcomponentsjs/webcomponents-lite.min.js",
     "bower_components/codemirror/mode/javascript/**.js ",
     "bower_components/arc-definitions/definitions.json",
-    "bower_components/oauth-authorization/oauth-popup.html"
+    "bower_components/oauth-authorization/oauth-popup.html",
+    "bower_components/xml-viewer/workers/**.js",
+    "bower_components/response-body-view/html-preview.html",
+    "bower_components/response-body-view/html-preview.js"
   ]
 }
