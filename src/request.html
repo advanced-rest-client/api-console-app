@@ -45,9 +45,11 @@ The request panel in the console app.
       path="{{path}}"
       redirect-url="[[redirectUrl]]"
       request="{{request}}"
-      response="{{response}}"></raml-request-panel>
-    <template is="dom-if" if="[[_computeOpenResponsePanel(request, response)]]">
-      <response-view request="[[request]]" response="[[response]]" is-xhr></response-view>
+      response="{{response}}"
+      response-is-xhr="{{responseIsXhr}}"
+      response-error="{{responseError}}"></raml-request-panel>
+    <template is="dom-if" if="[[hasResponse]]">
+      <response-view request="[[request]]" response="[[response]]" response-error="[[responseError]]" is-xhr="[[responseIsXhr]]"></response-view>
     </template>
     <raml-aware raml="{{raml}}" scope="raml"></raml-aware>
     <paper-toast id="noAuth" text="The required authorization is not set." duration="3000"></paper-toast>
@@ -69,7 +71,10 @@ The request panel in the console app.
         },
         // Selected object in the navigation menu and parsed by the
         // `raml-path-selector` element
-        selectedObject: Object,
+        selectedObject: {
+          type: Object,
+          observer: '_selectedObjectChanged'
+        },
         // A parent endpoint of selected method object (if any).
         selectedParent: Object,
         // If true it will display a narrow layout.
@@ -92,7 +97,22 @@ The request panel in the console app.
          * Created by the transport the `Response` object as defined in the
          * Fetch API spec.
          */
-        response: Response
+        response: Response,
+        // True if the response is made by the Fetch / XHR api.
+        responseIsXhr: {
+          type: Boolean,
+          value: true
+        },
+        /**
+         * An error object associated with the response when error.
+         */
+        responseError: Object,
+        // Computed value, true, when the response object is set.
+        hasResponse: {
+          type: Boolean,
+          value: false,
+          computed: '_computeHasResponse(response)'
+        }
       },
 
       listeners: {
@@ -105,22 +125,10 @@ The request panel in the console app.
         this.redirectUrl = a.href;
       },
 
-      // observers: [
-      //   '_isMethodSelectedChanged(isMethod)'
-      // ],
-      //
-      // _isMethodSelectedChanged: function(isMethod) {
-      //   if (isMethod) {
-      //     return;
-      //   }
-      //   this.async(function() {
-      //     if (!this.path.match(/^.*\.methods\.\d+$/)) {
-      //       this.fire('navigate', {
-      //         url: '/docs/' + this.path.replace(/\./g, '-')
-      //       });
-      //     }
-      //   }, 5);
-      // },
+      _computeHasResponse: function(response) {
+        return !!response;
+      },
+
       // Fire an event to parent element to navigate back to the docs.
       _navigateDocs: function() {
         this.fire('navigate', {
@@ -128,14 +136,6 @@ The request panel in the console app.
         });
       },
 
-      // // An event handler for tap / click on navigation events.
-      // _navigate: function(e) {
-      //   if (e.target.dataset && e.target.dataset.place) {
-      //     this.fire('navigate', {
-      //       url: '/docs/' + this.path.replace(/\./g, '-')
-      //     });
-      //   }
-      // },
       /**
        * A handler for the API call.
        * This handler will only check if there is authorization required
@@ -154,8 +154,10 @@ The request panel in the console app.
         }
       },
 
-      _computeOpenResponsePanel: function(request, response) {
-        return !!(request && response);
+      _selectedObjectChanged: function() {
+        this.set('request', undefined);
+        this.set('response', undefined);
+        this.set('responseError', undefined);
       }
     });
   </script>
