@@ -113,6 +113,11 @@ the License.
       min-width: 320px;
     }
 
+    .drawer-content-wrapper {
+      height: calc(100% - 64px); /* 64px - toolbar height */
+      overflow-y: auto;
+    }
+
     </style>
     <app-location route="{{route}}"></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
@@ -127,16 +132,17 @@ the License.
       <!-- Drawer content -->
       <app-drawer id="drawer">
         <app-toolbar class="drawer-title">API console</app-toolbar>
-        <raml-path-selector
-        narrow="[[narrow]]"
-        raml="[[raml]]"
-        selected-path="{{path}}"
-        resources-only="[[isRequestPanel]]"
-        no-resource-selection="[[isRequestPanel]]"
-        force-wide-layout
-        opened></raml-path-selector>
+        <div class="drawer-content-wrapper">
+          <raml-path-selector
+            narrow="[[narrow]]"
+            raml="[[raml]]"
+            selected-path="{{path}}"
+            resources-only="[[isRequestPanel]]"
+            no-resource-selection="[[isRequestPanel]]"
+            force-wide-layout
+            opened></raml-path-selector>
+        </div>
       </app-drawer>
-
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
         <app-header condenses reveals effects="waterfall">

@@ -35,21 +35,32 @@ The request panel in the console app.
     </style>
     <paper-button on-tap="_navigateDocs">
       <iron-icon icon="arc:chevron-left"></iron-icon>
-      Full documentation
+      Documentation
     </paper-button>
     <raml-request-panel
       narrow="{{narrow}}"
-      raml="[[raml]]"
       method="{{selectedObject}}"
-      parent-endpoint="[[selectedParent]]"
-      path="{{path}}"
       redirect-url="[[redirectUrl]]"
       request="{{request}}"
       response="{{response}}"
       response-is-xhr="{{responseIsXhr}}"
-      response-error="{{responseError}}"></raml-request-panel>
+      response-error="{{responseError}}"
+      loading-time="{{loadingTime}}"
+      timings="{{timings}}"
+      redirect-timings="{{redirectTimings}}"
+      redirects="{{redirects}}"
+      source-message="{{sourceMessage}}"></raml-request-panel>
     <template is="dom-if" if="[[hasResponse]]">
-      <response-view request="[[request]]" response="[[response]]" response-error="[[responseError]]" is-xhr="[[responseIsXhr]]"></response-view>
+      <response-view
+        request="[[request]]"
+        response="[[response]]"
+        response-error="[[responseError]]"
+        is-xhr="[[responseIsXhr]]"
+        loading-time="{{loadingTime}}"
+        redirects="[[redirects]]"
+        redirect-timings="[[redirectTimings]]"
+        response-timings="[[timings]]"
+        sent-http-message="[[sourceMessage]]"></response-view>
     </template>
     <raml-aware raml="{{raml}}" scope="raml"></raml-aware>
     <paper-toast id="noAuth" text="The required authorization is not set." duration="3000"></paper-toast>
@@ -112,7 +123,29 @@ The request panel in the console app.
           type: Boolean,
           value: false,
           computed: '_computeHasResponse(response)'
-        }
+        },
+        // Response full loading time.
+        loadingTime: Number,
+        /**
+         * If the transport method is able to collect detailed information about request timings
+         * then this value will be set. It's the `timings` property from the HAR 1.2 spec.
+         */
+        timings: Object,
+        /**
+         * If the transport method is able to collect detailed information about redirects timings
+         * then this value will be set. It's a list of `timings` property from the HAR 1.2 spec.
+         */
+        redirectTimings: Array,
+        /**
+         * It will be set if the transport method can generate information about redirections.
+         */
+        redirects: Array,
+        /**
+         * Http message sent to the server.
+         *
+         * This information should be available only in case of advanced HTTP transport.
+         */
+        sourceMessage: String,
       },
 
       listeners: {
