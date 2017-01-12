@@ -23,7 +23,7 @@
         "value": "max-age=86400"
       }, {
         "key": "X-Frame-Options",
-        "value": "DENY"
+        "value": "SAMEORIGIN"
       }, {
         "key": "X-XSS-Protection",
         "value": "1; mode=block"
