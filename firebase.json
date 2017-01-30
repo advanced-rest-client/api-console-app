@@ -10,27 +10,14 @@
     }, {
       "source": "bower_components/oauth-authorization/oauth-popup.html*",
       "destination": "/bower_components/oauth-authorization/oauth-popup.html"
+    }, {
+      "source": "bower_components/oauth-authorization/oauth-popup.html",
+      "destination": "/bower_components/oauth-authorization/oauth-popup.html"
     }],
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "headers": [{
-      "source": "**/**",
-      "headers": [{
-        "key": "Cache-Control",
-        "value": "max-age=86400"
-      }, {
-        "key": "X-Frame-Options",
-        "value": "SAMEORIGIN"
-      }, {
-        "key": "X-XSS-Protection",
-        "value": "1; mode=block"
-      }, {
-        "key": "X-Content-Type-Options",
-        "value": "nosniff"
-      }]
-    }]
+    ]
   }
 }
