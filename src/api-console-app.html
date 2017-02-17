@@ -311,7 +311,8 @@ the License.
 
     listeners: {
       'navigate': '_navigate',
-      'app-drawer-transitioned': '_onDraawerTransitionEnd'
+      'app-drawer-transitioned': '_onDraawerTransitionEnd',
+      'scroll-to': '_onScrollRequested'
     },
 
     observers: [
@@ -557,6 +558,12 @@ the License.
       if (url) {
         this.appendApiSrc(url);
       }
+    },
+
+    _onScrollRequested: function(e) {
+      var y = e.detail.y;
+      var panel = this.$$('app-header');
+      panel.scrollTarget.scrollTop = y;
     }
   });
   </script>

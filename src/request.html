@@ -31,7 +31,6 @@ The request panel in the console app.
     :host {
       display: block;
     }
-
     </style>
     <paper-button on-tap="_navigateDocs">
       <iron-icon icon="arc:chevron-left"></iron-icon>
@@ -149,7 +148,8 @@ The request panel in the console app.
       },
 
       listeners: {
-        'api-console-request': '_apiRequested'
+        'api-console-request': '_apiRequested',
+        'api-console-response-ready': '_onResponseReady'
       },
 
       ready: function() {
@@ -191,6 +191,16 @@ The request panel in the console app.
         this.set('request', undefined);
         this.set('response', undefined);
         this.set('responseError', undefined);
+      },
+
+      _onResponseReady: function() {
+        this.async(function() {
+          let panel = this.$$('response-view');
+          let position = panel.offsetTop;
+          this.fire('scroll-to', {
+            y: position
+          });
+        }, 1);
       }
     });
   </script>
