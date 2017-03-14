@@ -21,7 +21,6 @@ the License.
 <link rel="import" href="../bower_components/arc-icons/arc-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/fetch-polyfill/fetch-polyfill.html">
-
 <!--
 The request panel in the console app.
 -->
@@ -32,10 +31,6 @@ The request panel in the console app.
       display: block;
     }
     </style>
-    <paper-button on-tap="_navigateDocs">
-      <iron-icon icon="arc:chevron-left"></iron-icon>
-      Documentation
-    </paper-button>
     <raml-request-panel
       narrow="{{narrow}}"
       method="{{selectedObject}}"

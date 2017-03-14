@@ -34,6 +34,7 @@
     "web-component-tester": "^4.0.0"
   },
   "resolutions": {
-    "paper-autocomplete": "1.0.12"
+    "raml-headers-form": "^0.2.0",
+    "raml-request-headers-editor": "^0.2.0"
   }
 }

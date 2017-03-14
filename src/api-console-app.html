@@ -136,8 +136,6 @@ the License.
             narrow="[[narrow]]"
             raml="[[raml]]"
             selected-path="{{path}}"
-            resources-only="[[isRequestPanel]]"
-            no-resource-selection="[[isRequestPanel]]"
             force-wide-layout
             opened></raml-path-selector>
         </div>
@@ -189,10 +187,7 @@ the License.
       raml="[[raml]]"
       selected-path="{{path}}"
       selected-object="{{selectedObject}}"
-      selected-parent="{{selectedParent}}"
-      is-method="{{isMethod}}"
-      is-resource="{{isResource}}"
-      is-documentation="{{isDocumentation}}"></raml-path-to-object>
+      selected-parent="{{selectedParent}}"></raml-path-to-object>
     <paper-toast text=""></paper-toast>
     <paper-dialog id="ramlFileUrlDialog" on-iron-overlay-closed="_ramlUrlDialogClosed">
       <h2>RAML file address</h2>
@@ -247,17 +242,6 @@ the License.
       },
       // True if the element and child elements has been loaded.
       _loaded: Boolean,
-      // Will be set to true if the RAML file has been loaded.
-      _hasRaml: {
-        type: Boolean,
-        value: false,
-        computed: '_computeHasRaml(_loaded, raml)'
-      },
-      // Set by the child element. True whem the user selected any of the RAML data.
-      ramlHasSelected: Boolean,
-      // True when the currently selected object is a method. This only matters when displaying
-      // the request panel
-      isMethodSelected: Boolean,
       // True when the framgent page is loaded.
       loadingFragment: {
         type: Boolean,
@@ -274,34 +258,7 @@ the License.
       // `raml-path-selector` element
       selectedObject: Object,
       // A parent endpoint of selected method object (if any).
-      selectedParent: Object,
-      // True when current selection is a method
-      isMethod: {
-        type: Boolean,
-        value: false
-      },
-      // True when current selection is a resource
-      isResource: {
-        type: Boolean,
-        value: false
-      },
-      // True when current selection is a documentation node
-      isDocumentation: {
-        type: Boolean,
-        value: false
-      },
-      // True when anything is selected
-      hasSelection: {
-        type: Boolean,
-        value: false,
-        computed: '_computeHasSelection(isMethod,isResource,isDocumentation)'
-      },
-      // Computed value, true if current page is the request panel
-      isRequestPanel: {
-        type: Boolean,
-        value: false,
-        computed: '_computeRequestPanel(page)'
-      }
+      selectedParent: Object
     },
 
     listeners: {
@@ -473,6 +430,9 @@ the License.
     },
 
     _pathChanged: function(path) {
+      if (this.page !== 'docs') {
+        return this.set('route.path', '/docs/' + path);
+      }
       if (!path) {
         this.set('subrouteData.path', '');
         return;
@@ -491,11 +451,6 @@ the License.
       } else {
         el.style.zIndex = 1;
       }
-    },
-
-    // Computes a boolean value if the user selected anything in the path selector.
-    _computeHasSelection: function(isMethod, isResource, isDocumentation) {
-      return !!(isMethod || isResource || isDocumentation);
     },
 
     // Resets the path then the RAML object change
@@ -538,10 +493,6 @@ the License.
       }
       var item = this.$.urlSelector.children[this.$.urlSelector.children.length - 1];
       item.innerText = title;
-    },
-    // Returns true if the  `page` is the request panel.
-    _computeRequestPanel: function(page) {
-      return page === 'request';
     },
 
     _ramlUrlDialogClosed: function(e) {
