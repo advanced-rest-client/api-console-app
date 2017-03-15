@@ -277,6 +277,7 @@ the License.
 
     attached: function() {
       this._readInitParams();
+      this._setInitiProperties();
       this._loaded = true;
       this._apiSrcChanged(this.src);
       this.__initRoute = this.route.path;
@@ -337,7 +338,7 @@ the License.
       }
       return false;
     },
-
+    // Reads the query parameters and creates a parameters map.
     _readInitParams: function() {
       var query = location.href.substr(location.href.indexOf('?') + 1);
       if (!query) {
@@ -349,6 +350,15 @@ the License.
         params[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1] || '');
       });
       this.initParams = params;
+    },
+    // Sets the properties from the URL params.
+    _setInitiProperties: function() {
+      if (!this.initParams) {
+        return;
+      }
+      if ('api' in this.initParams) {
+        this.src = this.initParams.api;
+      }
     },
     // THIS IS NOT PART OF THE API CONSOLE (for debug).
     appendApiSrc: function(url) {
@@ -365,8 +375,14 @@ the License.
 
     // Downloads and parses the RAML definition for given `src`.
     _apiSrcChanged: function(url) {
-      if (!url || !this._loaded) {
+      if (!this._loaded) {
         return;
+      }
+      if (!url) {
+        url = this.checkExternalApi();
+        if (!url) {
+          return;
+        }
       }
       this._setWorking(true);
       this._setRaml(undefined);
