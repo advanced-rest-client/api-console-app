@@ -141,12 +141,12 @@ the License.
         </div>
       </app-drawer>
       <!-- Main content -->
-      <app-header-layout has-scrolling-region>
+      <app-header-layout>
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="arc:menu" drawer-toggle></paper-icon-button>
             <div main-title>[[raml.title]]</div>
-            <paper-dropdown-menu label="Example APIs" class="toolbar">
+            <!-- <paper-dropdown-menu label="Example APIs" class="toolbar">
               <paper-listbox id="urlSelector" class="dropdown-content" selected="0" on-iron-select="_apiSelected" class="toolbar">
                 <paper-item data-url="https://cdn.rawgit.com/advanced-rest-client/drive-raml-api-v2/ab60ed2/api.raml">Google Grive API</paper-item>
                 <paper-item data-url="https://raw.githubusercontent.com/advanced-rest-client/raml-example-api/master/api.raml">ARC example</paper-item>
@@ -163,7 +163,7 @@ the License.
                 <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8111/versions/8305/files/root">SalesForce</paper-item>
                 <paper-item data-url="custom">Custom</paper-item>
               </paper-listbox>
-            </paper-dropdown-menu>
+            </paper-dropdown-menu> -->
             <paper-progress hidden$="[[!loadingFragment]]" indeterminate bottom-item></paper-progress>
           </app-toolbar>
         </app-header>
@@ -264,7 +264,8 @@ the License.
     listeners: {
       'navigate': '_navigate',
       'app-drawer-transitioned': '_onDraawerTransitionEnd',
-      'scroll-to': '_onScrollRequested'
+      'scroll-to': '_onScrollRequested',
+      'raml-path-changed': '_innerPathChanged'
     },
 
     observers: [
@@ -278,12 +279,12 @@ the License.
       this._readInitParams();
       this._loaded = true;
       this._apiSrcChanged(this.src);
+      this.__initRoute = this.route.path;
     },
 
     _routePageChanged: function(page) {
       if (page === '/' || page === '') {
-        page = 'docs';
-        this.routeData.page = 'docs';
+        return this.set('route.path', '/docs');
       }
       this.page = page || 'docs';
 
@@ -291,23 +292,23 @@ the License.
         this.$.drawer.close();
       }
     },
-
+    // Downloads requested fragment if it hasn't already.
     _pageChanged: function(page) {
       // Load page import on demand. Show 404 page if fails
       var resolvedPageUrl = this.resolveUrl(page + '.html');
       this.loadingFragment = true;
       this.importHref(resolvedPageUrl, this._pageLoaded, this._showPage404, true);
     },
-
+    // Fallback method if fragment do not exists
     _showPage404: function() {
       this.page = 'view404';
       this.loadingFragment = false;
     },
-
+    // Called when the fragmet has been loaded
     _pageLoaded: function() {
       this.loadingFragment = false;
     },
-
+    // THIS IS NOT PART OF THE API CONSOLE (for debug).
     _apiSelected: function(e) {
       var url;
       if (!this._apiInitialSelected) {
@@ -349,7 +350,7 @@ the License.
       });
       this.initParams = params;
     },
-
+    // THIS IS NOT PART OF THE API CONSOLE (for debug).
     appendApiSrc: function(url) {
       var item = document.createElement('paper-item');
       item.dataset.url = url;
@@ -416,7 +417,7 @@ the License.
     _navigate: function(e) {
       this.set('route.path', e.detail.url);
     },
-
+    // Decodes path to internal data model.
     _urlPathChanged: function(path) {
       if (!path) {
         this.set('path', '');
@@ -425,7 +426,6 @@ the License.
       var parsedPath = path.replace(/\-/g, '.');
       if (parsedPath !== this.path) {
         this.set('path', parsedPath);
-        console.log('setting path', parsedPath);
       }
     },
 
@@ -439,7 +439,7 @@ the License.
       }
       var parsedPath = path.replace(/\./g, '-');
       if (parsedPath !== this.subrouteData.path) {
-        this.set('subrouteData.path', parsedPath);
+        return this.set('route.path', '/' + this.page + '/' + parsedPath);
       }
     },
 
@@ -465,6 +465,13 @@ the License.
 
       if (!this._initialRamlLoaded) {
         this._initialRamlLoaded = true;
+        if (this.__initRoute) {
+          this.async(function() {
+            this.set('route.path', this.__initRoute);
+            this.__initRoute = undefined;
+          }, 1);
+          return;
+        }
         if (this.path) {
           // Prohibits path change if it was set in the URL.
           return;
@@ -479,6 +486,7 @@ the License.
     },
     // Updates toolbar main title after the RAML file is loaded.
     // This will be the API name.
+    // THIS IS NOT PART OF THE API CONSOLE (for debug).
     _ramlChangedName: function(raml) {
       if (!this._updateCustomApi || !raml) {
         return;
@@ -494,7 +502,7 @@ the License.
       var item = this.$.urlSelector.children[this.$.urlSelector.children.length - 1];
       item.innerText = title;
     },
-
+    // Called when the URL dialog closes. THIS IS NOT PART OF THE API CONSOLE.
     _ramlUrlDialogClosed: function(e) {
       if (e.detail.canceled || !e.detail.confirmed) {
         this.$.urlSelector.selected = 0;
@@ -505,11 +513,16 @@ the License.
         this.appendApiSrc(url);
       }
     },
-
+    // Scrolls the document to required position.
     _onScrollRequested: function(e) {
       var y = e.detail.y;
       var panel = this.$$('app-header');
       panel.scrollTarget.scrollTop = y;
+    },
+    // Handler for `raml-path-changed` that is fired from docs elements
+    _innerPathChanged: function(e) {
+      var parsedPath = e.detail.path.replace(/\./g, '-');
+      this.set('route.path', '/docs/' + parsedPath);
     }
   });
   </script>

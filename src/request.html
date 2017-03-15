@@ -190,8 +190,8 @@ The request panel in the console app.
 
       _onResponseReady: function() {
         this.async(function() {
-          let panel = this.$$('response-view');
-          let position = panel.offsetTop;
+          var panel = this.$$('response-view');
+          var position = panel.offsetTop;
           this.fire('scroll-to', {
             y: position
           });
