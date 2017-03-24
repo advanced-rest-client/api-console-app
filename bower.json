@@ -32,9 +32,5 @@
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
-  },
-  "resolutions": {
-    "raml-headers-form": "^0.2.0",
-    "raml-request-headers-editor": "^0.2.0"
   }
 }
