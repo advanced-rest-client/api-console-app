@@ -12,7 +12,7 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/raml-documentation-viewer/raml-documentation-viewer.html">
+<link rel="import" href="../bower_components/raml-documentation-panel/raml-documentation-panel.html">
 <!--
 The documentation viewer in the console app.
 -->
@@ -23,11 +23,11 @@ The documentation viewer in the console app.
       display: block;
     }
     </style>
-    <raml-documentation-viewer
-      aware="raml"
+    <raml-documentation-panel
+      narrow="[[narrow]]"
       selected-object="[[selectedObject]]"
       selected-parent="[[selectedParent]]"
-      path="{{path}}"></raml-documentation-viewer>
+      path="[[path]]"></raml-documentation-panel>
   </template>
   <script>
   Polymer({
@@ -48,7 +48,9 @@ The documentation viewer in the console app.
       // `raml-path-selector` element
       selectedObject: Object,
       // A parent endpoint of selected method object (if any).
-      selectedParent: Object
+      selectedParent: Object,
+      // If true then renders narrow layout.
+      narrow: Boolean
     },
 
     listeners: {
