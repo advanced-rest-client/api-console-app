@@ -34,7 +34,7 @@ the License.
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
-
+<link rel="import" href="../bower_components/api-console-ext-comm/api-console-ext-comm.html">
 <link rel="import" href="api-console-styles.html">
 
 <dom-module id="api-console-app">
@@ -177,7 +177,8 @@ the License.
           <api-console-request narrow="{{narrow}}" name="request" page="[[page]]"
             selected-object="[[selectedObject]]"
             selected-parent="[[selectedParent]]"
-            path="{{path}}"></api-console-request>
+            path="{{path}}"
+            no-extension-banner="[[noExtensionBanner]]"></api-console-request>
           <api-console-404 name="view404"></api-console-404>
         </iron-pages>
       </app-header-layout>
@@ -201,6 +202,8 @@ the License.
         <paper-button dialog-confirm>Accept</paper-button>
       </div>
     </paper-dialog>
+
+    <api-console-ext-comm></api-console-ext-comm>
   </template>
   <script>
   Polymer({
@@ -260,7 +263,9 @@ the License.
       // `raml-path-selector` element
       selectedObject: Object,
       // A parent endpoint of selected method object (if any).
-      selectedParent: Object
+      selectedParent: Object,
+      // If not set or false then the install extension banner will be allowed to be shown.
+      noExtensionBanner: Boolean
     },
 
     listeners: {
@@ -278,11 +283,27 @@ the License.
     ],
 
     attached: function() {
+      this.listen(window, 'api-console-extension-installed', '_onExtensionInstalled');
+    },
+
+    detached: function() {
+      this.unlisten(window, 'api-console-extension-installed', '_onExtensionInstalled');
+    },
+
+    ready: function() {
+      console.log('api-console ready');
       this._readInitParams();
       this._setInitiProperties();
       this._loaded = true;
       this._apiSrcChanged(this.src);
       this.__initRoute = this.route.path;
+      this.notifyReady();
+    },
+
+    notifyReady: function() {
+      this.debounce('notify-ready', function() {
+        this.fire('api-console-ready');
+      }, 1000);
     },
 
     _routePageChanged: function(page) {
@@ -389,36 +410,24 @@ the License.
       this._setWorking(true);
       this._setRaml(undefined);
       this._setErrors(undefined);
-      var detail = {
-        'url': url
-      };
-      var event = this.fire('parse-raml-url', detail);
-      if (!event.detail.raml) {
-        this._toastMessage('Internal error. RAML parser not in the DOM.');
-        console.error('Event did not contained raml property.');
-        return;
-      }
-      this._handleRamlEvent(event);
-    },
-
-    // Handles the parser event response.
-    _handleRamlEvent: function(event) {
       var context = this;
-      event.detail.raml
-        .then(function(result) {
-          context._setRaml(result[1].specification);
-          context._setErrors(result[1].errors);
-          context.fire('raml-ready', {
-            raml: result[1].specification,
-            errors: result[1].errors
-          });
-          context._setWorking(false);
-        })
-        .catch(function(e) {
-          context._toastMessage('Parser error: ' + e.message);
-          context._setWorking(false);
-          console.warn('API error', e);
+
+      this.$$('raml-js-parser')
+      .loadApi(url)
+      .then(function(result) {
+        context._setRaml(result[1].specification);
+        context._setErrors(result[1].errors);
+        context.fire('raml-ready', {
+          raml: result[1].specification,
+          errors: result[1].errors
         });
+        context._setWorking(false);
+      })
+      .catch(function(e) {
+        context._toastMessage('Parser error: ' + e.message);
+        context._setWorking(false);
+        console.warn('API error', e);
+      });
     },
     // Displays a toast with a `message`.
     _toastMessage: function(message) {
@@ -541,6 +550,10 @@ the License.
     _innerPathChanged: function(e) {
       var parsedPath = e.detail.path.replace(/\./g, '-');
       this.set('route.path', '/docs/' + parsedPath);
+    },
+
+    _onExtensionInstalled: function() {
+      this.set('noExtensionBanner', true);
     }
   });
   </script>

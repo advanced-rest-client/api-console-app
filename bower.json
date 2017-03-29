@@ -28,7 +28,8 @@
     "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
     "paper-input": "PolymerElements/paper-input#^1.1.22",
     "response-view": "advanced-rest-client/response-view#^0.1.1",
-    "fetch-polyfill": "advanced-rest-client/fetch-polyfill#^0.1.1"
+    "fetch-polyfill": "advanced-rest-client/fetch-polyfill#^0.1.1",
+    "api-console-ext-comm": "advanced-rest-client/api-console-ext-comm#^0.1.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

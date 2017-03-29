@@ -12,14 +12,13 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/raml-request-panel/raml-request-panel.html">
 <link rel="import" href="../bower_components/response-view/response-view.html">
 <link rel="import" href="../bower_components/raml-aware/raml-aware.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../bower_components/arc-icons/arc-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/arc-icons/arc-icons.html">
 <link rel="import" href="../bower_components/fetch-polyfill/fetch-polyfill.html">
 <!--
 The request panel in the console app.
@@ -30,7 +29,27 @@ The request panel in the console app.
     :host {
       display: block;
     }
+
+    .extension-banner {
+      @apply(--layout-horizontal);
+      @apply(--layout-center);
+      display: none;
+      padding: 0 24px;
+      border-bottom: 1px rgba(0,0,0,0.12) solid;
+      margin-bottom: 12px;
+      color: rgba(0,0,0,0.54);
+    }
+
+    .extension-banner.active {
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+    }
     </style>
+    <div class="extension-banner">
+      <p>For better experience install API console extension. Get it from <a target="_blank" href="https://chrome.google.com/webstore/detail/olkpohecoakpkpinafnpppponcfojioa">Chrome Web Store</a></p>
+      <paper-icon-button icon="arc:close" on-tap="dismissExtensionBanner"></paper-icon-button>
+    </div>
     <raml-request-panel
       narrow="{{narrow}}"
       method="{{selectedObject}}"
@@ -57,7 +76,7 @@ The request panel in the console app.
         sent-http-message="[[sourceMessage]]"></response-view>
     </template>
     <raml-aware raml="{{raml}}" scope="raml"></raml-aware>
-    <paper-toast id="noAuth" text="The required authorization is not set." duration="3000"></paper-toast>
+    <paper-toast horizontal-align="right" id="noAuth" text="The required authorization is not set." duration="3000"></paper-toast>
   </template>
   <script>
     Polymer({
@@ -140,6 +159,15 @@ The request panel in the console app.
          * This information should be available only in case of advanced HTTP transport.
          */
         sourceMessage: String,
+        // If true then the install extension banner will be always hidden.
+        noExtensionBanner: Boolean,
+        /// If true then current browser is Chrome
+        isChrome: {
+          type: Boolean,
+          value: function() {
+            return /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+          }
+        }
       },
 
       listeners: {
@@ -147,10 +175,21 @@ The request panel in the console app.
         'api-console-response-ready': '_onResponseReady'
       },
 
+      attached: function() {
+        this.listen(window, 'api-console-extension-installed', '_onExtensionInstalled');
+      },
+
       ready: function() {
         var a = document.createElement('a');
         a.href = '/bower_components/oauth-authorization/oauth-popup.html';
         this.redirectUrl = a.href;
+        if (this.isChrome) {
+          this.async(function() {
+            if (!this.noExtensionBanner) {
+              this.openInstallExtensionBanner();
+            }
+          }, 1000);
+        }
       },
 
       _computeHasResponse: function(response) {
@@ -196,6 +235,14 @@ The request panel in the console app.
             y: position
           });
         }, 1);
+      },
+
+      dismissExtensionBanner: function() {
+        this.$$('.extension-banner').classList.remove('active');
+      },
+
+      openInstallExtensionBanner: function() {
+        this.$$('.extension-banner').classList.add('active');
       }
     });
   </script>
