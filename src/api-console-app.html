@@ -59,28 +59,6 @@ the License.
       --paper-icon-button-ink-color: white;
     }
 
-    .toolbar {
-      --paper-input-container-label: {
-        color: white;
-      }
-      --paper-input-container-label-focus: {
-        color: white;
-      }
-      --paper-input-container-label-floating: {
-        color: white;
-      }
-      --paper-input-container-input: {
-        color: white;
-      }
-      --paper-dropdown-menu-icon: {
-        color: white;
-      }
-      --paper-input-container-color: #fff;
-      --paper-dropdown-menu-input: {
-        color: white;
-      }
-    }
-
     .loader {
       padding: 16px;
       @apply(--layout-vertical);
@@ -89,6 +67,8 @@ the License.
       background-color: #fff;
       z-index: 2;
       margin-top: 64px;
+      text-align: center;
+      color: #506773;
     }
 
     *[hidden] {
@@ -102,16 +82,12 @@ the License.
       --paper-progress-container-color: transparent;
     }
 
-    iron-pages {
+    iron-pages.main {
       height: 100%;
     }
 
-    iron-pages > * {
+    iron-pages.main > * {
       height: 100%;
-    }
-
-    #ramlFileUrl {
-      min-width: 320px;
     }
 
     .drawer-content-wrapper {
@@ -125,7 +101,10 @@ the License.
 
     <div class="loader" hidden$="[[!working]]">
       <paper-spinner active="[[working]]"></paper-spinner>
-      <p>Loading RAML content. Please wait a moment...</p>
+      <iron-pages selected="[[workingState]]">
+        <p>Loading RAML content.<br/>Please wait a moment...</p>
+        <p>Preparing API console data.<br/>Please wait a moment...</p>
+      </iron-pages>
     </div>
 
     <app-drawer-layout fullbleed responsive-width="860px">
@@ -149,28 +128,10 @@ the License.
           <app-toolbar>
             <paper-icon-button icon="arc:menu" drawer-toggle></paper-icon-button>
             <div main-title>[[raml.title]]</div>
-            <!-- <paper-dropdown-menu label="Example APIs" class="toolbar">
-              <paper-listbox id="urlSelector" class="dropdown-content" selected="0" on-iron-select="_apiSelected" class="toolbar">
-                <paper-item data-url="https://cdn.rawgit.com/advanced-rest-client/drive-raml-api-v2/ab60ed2/api.raml">Google Grive API</paper-item>
-                <paper-item data-url="https://raw.githubusercontent.com/advanced-rest-client/raml-example-api/master/api.raml">ARC example</paper-item>
-                <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/world-music-api/api.raml">World Music API</paper-item>
-                <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/alainn-mobile-shopping/api.raml">Álainn Cosmetics Mobile Orders API</paper-item>
-                <paper-item data-url="https://raw.githubusercontent.com/raml-org/raml-examples/master/others/mobile-order-api/api.raml">Mobile Order API</paper-item>
-                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/19695/versions/24854/files/root">FlightStats</paper-item>
-                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/6308/versions/6302/files/root">Twitter API</paper-item>
-                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7965/versions/8129/files/root">Facebook</paper-item>
-                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8077/versions/8266/files/root">Zendesk</paper-item>
-                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8086/versions/8276/files/root">LinkedIn</paper-item>
-                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7195/versions/7257/files/root">Google Contacts API</paper-item>
-                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/7782/versions/7918/files/root">GitHub API</paper-item>
-                <paper-item data-url="https://anypoint.mulesoft.com/apiplatform/repository/v2/organizations/52560d3f-c37a-409d-9887-79e0a9a9ecff/public/apis/8111/versions/8305/files/root">SalesForce</paper-item>
-                <paper-item data-url="custom">Custom</paper-item>
-              </paper-listbox>
-            </paper-dropdown-menu> -->
             <paper-progress hidden$="[[!loadingFragment]]" indeterminate bottom-item></paper-progress>
           </app-toolbar>
         </app-header>
-        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
+        <iron-pages class="main" selected="[[page]]" attr-for-selected="name" fallback-selection="view404" role="main">
           <api-console-docs narrow="{{narrow}}" name="docs"
             selected-object="[[selectedObject]]"
             selected-parent="[[selectedParent]]"
@@ -185,8 +146,8 @@ the License.
       </app-header-layout>
     </app-drawer-layout>
 
-    <raml-js-parser json latest-json="{{plainRaml}}"></raml-js-parser>
-    <raml-json-enhance json="[[plainRaml.specification]]" result="{{raml}}"></raml-json-enhance>
+    <raml-js-parser json></raml-js-parser>
+    <raml-json-enhance></raml-json-enhance>
 
     <raml-aware raml="[[raml]]" scope="raml"></raml-aware>
     <raml-path-to-object
@@ -195,17 +156,6 @@ the License.
       selected-object="{{selectedObject}}"
       selected-parent="{{selectedParent}}"></raml-path-to-object>
     <paper-toast text=""></paper-toast>
-    <paper-dialog id="ramlFileUrlDialog" on-iron-overlay-closed="_ramlUrlDialogClosed">
-      <h2>RAML file address</h2>
-      <div>
-        <paper-input id="ramlFileUrl" autofocus label="Enter RAML file web address"></paper-input>
-      </div>
-      <div class="buttons">
-        <paper-button dialog-dismiss>Cancel</paper-button>
-        <paper-button dialog-confirm>Accept</paper-button>
-      </div>
-    </paper-dialog>
-
     <api-console-ext-comm></api-console-ext-comm>
   </template>
   <script>
@@ -233,18 +183,25 @@ the License.
       working: {
         type: Boolean,
         value: false,
-        readOnly: true,
-        notify: true
+        readOnly: true
       },
-      // RAML as the JSON produced by the parser. The `.specificvation` part of the output.
+      // A state of the RAML parsing task. 0 - working, 1 - enhancing
+      workingState: {
+        type: Number,
+        value: 0
+      },
+      /**
+       * Enhanced JSON produced by the RAML JS parser.
+       * The `.specification` part of the output mast be transformed by the `raml-json-enhance`
+       * element in order for it to work.
+       */
       raml: {
         type: Object,
-        notify: true
+        readOnly: true
       },
       // List of parser errors.
       errors: {
         type: Array,
-        notify: true,
         readOnly: true
       },
       // True if the element and child elements has been loaded.
@@ -275,7 +232,7 @@ the License.
       'app-drawer-transitioned': '_onDraawerTransitionEnd',
       'scroll-to': '_onScrollRequested',
       'raml-path-changed': '_innerPathChanged',
-      'raml-json-enhance-ready': '_enhanced'
+      'raml-json-enhance-ready': '_onRamlEnhanced'
     },
 
     observers: [
@@ -295,9 +252,8 @@ the License.
 
     ready: function() {
       this._readInitParams();
-      this._setInitiProperties();
       this._loaded = true;
-      this._apiSrcChanged(this.src);
+      this._setInitiProperties();
       this.__initRoute = this.route.path;
       this.notifyReady();
     },
@@ -334,35 +290,6 @@ the License.
     _pageLoaded: function() {
       this.loadingFragment = false;
     },
-    // THIS IS NOT PART OF THE API CONSOLE (for debug).
-    _apiSelected: function(e) {
-      var url;
-      if (!this._apiInitialSelected) {
-        url = this.checkExternalApi();
-        if (url) {
-          this.appendApiSrc(url);
-          this._apiInitialSelected = true;
-          return;
-        }
-      }
-      this._apiInitialSelected = true;
-      url = e.detail.item.dataset.url;
-      if (url === 'custom') {
-        this.$.ramlFileUrlDialog.opened = true;
-        return;
-      }
-      this.src = url;
-    },
-
-    checkExternalApi: function() {
-      if (!this.initParams) {
-        return false;
-      }
-      if ('api' in this.initParams) {
-        return this.initParams.api;
-      }
-      return false;
-    },
     // Reads the query parameters and creates a parameters map.
     _readInitParams: function() {
       var query = location.href.substr(location.href.indexOf('?') + 1);
@@ -385,39 +312,27 @@ the License.
         this.src = this.initParams.api;
       }
     },
-    // THIS IS NOT PART OF THE API CONSOLE (for debug).
-    appendApiSrc: function(url) {
-      var item = document.createElement('paper-item');
-      item.dataset.url = url;
-      item.innerText = url;
-      this.$.urlSelector.appendChild(item);
-
-      if (this.$.urlSelector.children) {
-        this.$.urlSelector.selected = this.$.urlSelector.children.length - 1;
-      }
-      this._updateCustomApi = true;
-    },
 
     // Downloads and parses the RAML definition for given `src`.
     _apiSrcChanged: function(url) {
       if (!this._loaded) {
         return;
       }
-      if (!url) {
-        url = this.checkExternalApi();
-        if (!url) {
-          return;
-        }
-      }
+      this.workingState = 0;
       this._setWorking(true);
-      this.raml = undefined;
+      if (this.raml) {
+        this._setRaml(undefined);
+      }
+
       this._setErrors(undefined);
       var context = this;
 
       this.$$('raml-js-parser')
       .loadApi(url)
       .then(function(data) {
+        context.workingState = 1;
         context._setErrors(data.json.errors);
+        context.$$('raml-json-enhance').json = data.json.specification;
       })
       .catch(function(e) {
         context._toastMessage('Parser error: ' + e.message);
@@ -426,8 +341,9 @@ the License.
       });
     },
     // Called when raml has been enhanced.
-    _enhanced: function() {
+    _onRamlEnhanced: function(e) {
       this._setWorking(false);
+      this._setRaml(e.detail.json);
     },
     // Displays a toast with a `message`.
     _toastMessage: function(message) {
@@ -455,7 +371,7 @@ the License.
         this.set('path', parsedPath);
       }
     },
-
+    // Called when the RAML's path changed
     _pathChanged: function(path) {
       if (this.page !== 'docs') {
         return this.set('route.path', '/docs/' + path.replace(/\./g, '-'));
@@ -482,14 +398,9 @@ the License.
 
     // Resets the path then the RAML object change
     _ramlChanged: function(raml) {
-      this._ramlChangedName(raml);
-      if (!this._initialRamlLoaded && !raml) {
+      if (!raml) {
         return;
       }
-      if (!raml) {
-        return this.set('path', '');
-      }
-
       if (!this._initialRamlLoaded) {
         this._initialRamlLoaded = true;
         if (this.__initRoute) {
@@ -504,41 +415,7 @@ the License.
           return;
         }
       }
-      if (raml.documentation && raml.documentation.length) {
-        return this.set('path', 'documentation.0');
-      }
-      if (raml.resources && raml.resources.length) {
-        return this.set('path', 'resources.0');
-      }
-    },
-    // Updates toolbar main title after the RAML file is loaded.
-    // This will be the API name.
-    // THIS IS NOT PART OF THE API CONSOLE (for debug).
-    _ramlChangedName: function(raml) {
-      if (!this._updateCustomApi || !raml) {
-        return;
-      }
-      this._updateCustomApi = false;
-      var title = raml.title;
-      if (!title) {
-        return;
-      }
-      if (!this.$.urlSelector.children) {
-        return;
-      }
-      var item = this.$.urlSelector.children[this.$.urlSelector.children.length - 1];
-      item.innerText = title;
-    },
-    // Called when the URL dialog closes. THIS IS NOT PART OF THE API CONSOLE.
-    _ramlUrlDialogClosed: function(e) {
-      if (e.detail.canceled || !e.detail.confirmed) {
-        this.$.urlSelector.selected = 0;
-        return;
-      }
-      var url = this.$.ramlFileUrl.value;
-      if (url) {
-        this.appendApiSrc(url);
-      }
+      return this.set('path', 'summary');
     },
     // Scrolls the document to required position.
     _onScrollRequested: function(e) {
