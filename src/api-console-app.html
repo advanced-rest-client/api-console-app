@@ -26,6 +26,7 @@ the License.
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/raml-js-parser/raml-js-parser.html">
+<link rel="import" href="../bower_components/raml-json-enhance/raml-json-enhance.html">
 <link rel="import" href="../bower_components/raml-path-to-object/raml-path-to-object.html">
 <link rel="import" href="../bower_components/raml-path-selector/raml-path-selector.html">
 <link rel="import" href="../bower_components/raml-aware/raml-aware.html">
@@ -124,7 +125,7 @@ the License.
 
     <div class="loader" hidden$="[[!working]]">
       <paper-spinner active="[[working]]"></paper-spinner>
-      <p>Loading RAML content. Please wait a sec...</p>
+      <p>Loading RAML content. Please wait a moment...</p>
     </div>
 
     <app-drawer-layout fullbleed responsive-width="860px">
@@ -184,7 +185,9 @@ the License.
       </app-header-layout>
     </app-drawer-layout>
 
-    <raml-js-parser normalize-raml></raml-js-parser>
+    <raml-js-parser json latest-json="{{plainRaml}}"></raml-js-parser>
+    <raml-json-enhance json="[[plainRaml.specification]]" result="{{raml}}"></raml-json-enhance>
+
     <raml-aware raml="[[raml]]" scope="raml"></raml-aware>
     <raml-path-to-object
       raml="[[raml]]"
@@ -236,8 +239,7 @@ the License.
       // RAML as the JSON produced by the parser. The `.specificvation` part of the output.
       raml: {
         type: Object,
-        notify: true,
-        readOnly: true
+        notify: true
       },
       // List of parser errors.
       errors: {
@@ -272,7 +274,8 @@ the License.
       'navigate': '_navigate',
       'app-drawer-transitioned': '_onDraawerTransitionEnd',
       'scroll-to': '_onScrollRequested',
-      'raml-path-changed': '_innerPathChanged'
+      'raml-path-changed': '_innerPathChanged',
+      'raml-json-enhance-ready': '_enhanced'
     },
 
     observers: [
@@ -291,7 +294,6 @@ the License.
     },
 
     ready: function() {
-      console.log('api-console ready');
       this._readInitParams();
       this._setInitiProperties();
       this._loaded = true;
@@ -408,26 +410,24 @@ the License.
         }
       }
       this._setWorking(true);
-      this._setRaml(undefined);
+      this.raml = undefined;
       this._setErrors(undefined);
       var context = this;
 
       this.$$('raml-js-parser')
       .loadApi(url)
-      .then(function(result) {
-        context._setRaml(result[1].specification);
-        context._setErrors(result[1].errors);
-        context.fire('raml-ready', {
-          raml: result[1].specification,
-          errors: result[1].errors
-        });
-        context._setWorking(false);
+      .then(function(data) {
+        context._setErrors(data.json.errors);
       })
       .catch(function(e) {
         context._toastMessage('Parser error: ' + e.message);
         context._setWorking(false);
         console.warn('API error', e);
       });
+    },
+    // Called when raml has been enhanced.
+    _enhanced: function() {
+      this._setWorking(false);
     },
     // Displays a toast with a `message`.
     _toastMessage: function(message) {
@@ -458,7 +458,7 @@ the License.
 
     _pathChanged: function(path) {
       if (this.page !== 'docs') {
-        return this.set('route.path', '/docs/' + path);
+        return this.set('route.path', '/docs/' + path.replace(/\./g, '-'));
       }
       if (!path) {
         this.set('subrouteData.path', '');
