@@ -13,6 +13,7 @@ the License.
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../bower_components/anypoint-styles/anypoint-styles.html">
 <!--
 The API Console main stylesheet.
 It is a Polymer's custom style element. It will propagate variables and mixins on all elements;
@@ -20,66 +21,51 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 <style is="custom-style">
 
 :root {
-  --primary-color: #00A2DF;
-  --secondary-color: #506773;
+  --primary-color: var(--anypoint-color-primary, #00A2DF);
+  --secondary-color: var(--anypoint-color-secondary, #506773);
   --primary-background-color: #fff;
-  --accent-color: #CC143C;
+  --accent-color: var(--anypoint-color-violet3, #CC143C);
 
   /* THEME */
   --arc-font-common-base: {
-    font-family: 'Roboto', 'Noto', sans-serif;
-    -webkit-font-smoothing: antialiased;
+    @apply(--anypoint-font-common-base);
   };
 
   --arc-font-common-code: {
-    font-family: 'Roboto Mono', 'Consolas', 'Menlo', monospace;
-    -webkit-font-smoothing: antialiased;
+    @apply(--anypoint-font-common-code);
   };
+
   --arc-font-common-nowrap: {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @apply(--anypoint-font-common-nowrap);
   };
+
   --arc-font-display1: {
-    @apply(--arc-font-common-base);
-    font-size: 34px;
-    font-weight: 400;
-    letter-spacing: -.01em;
-    line-height: 40px;
+    @apply(--anypoint-font-header1);
   };
 
   --arc-font-headline: {
-    @apply(--arc-font-common-base);
-    font-size: 24px;
-    font-weight: 400;
-    letter-spacing: -.012em;
-    line-height: 32px;
+    @apply(--anypoint-font-header2);
   };
+
   --arc-font-title: {
-    @apply(--arc-font-common-base);
-    @apply(--arc-font-common-nowrap);
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 28px;
+    @apply(--anypoint-font-header5);
   };
+
   --arc-font-subhead: {
-    @apply(--arc-font-common-base);
-    font-size: 16px;
+    @apply(--anypoint-font-header5);
     font-weight: 400;
-    line-height: 24px;
+    margin: 0;
   };
+
   --arc-font-body2: {
-    @apply(--arc-font-common-base);
-    font-size: 14px;
+    @apply(--anypoint-font-body);
     font-weight: 500;
-    line-height: 24px;
   };
+
   --arc-font-body1: {
-    @apply(--arc-font-common-base);
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
+    @apply(--anypoint-font-body);
   };
+
   --arc-font-caption: {
     @apply(--arc-font-common-base);
     @apply(--arc-font-common-nowrap);
@@ -88,20 +74,20 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     letter-spacing: 0.011em;
     line-height: 20px;
   };
+
   --select-text: {
     @apply(--arc-font-common-base);
     -webkit-user-select: text;
     cursor: text;
   };
+
   --arc-link: {
     @apply(--arc-font-common-base);
     color: #00A1DF;
   };
+
   --arc-font-code1: {
-    @apply(--arc-font-common-code);
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
+    @apply(--anypoint-font-code);
   }
 
   /* Mixin applied to all the "missing info" paragraphs. By deafult all elements this kind are the <p> elements. But it may vary. */
@@ -123,15 +109,17 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --form-label: {
     font-weight: 500;
   }
+
   --input-line-color:  var(--primary-color);
 
     /* Mixin applied to all code blocks that highlights schemas / types / etc. All code block uses the `prism-theme-default`. */
   --code-block: {
     @apply(--arc-font-common-code);
   };
+
   --code-mirror: {
     background-color: #f5f2f0;
-  }
+  };
   --arc-code-mirror-background-color: #f5f2f0;
   --code-mirror-editor: {
     background-color: #f5f2f0;
@@ -215,7 +203,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     background-color: transparent;
   }
   --app-drawer-content-container: {
-    background-color: #EEEEEE;
+    background-color: var(--anypoint-color-aluminum2, #EEEEEE);
   }
   --raml-docs-response-panel-docs-content: {
     padding: 8px;
@@ -245,6 +233,24 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 
   --method-display-color-selected: #000;
   --raml-docs-main-content-width: 1200px;
+
+  --paper-checkbox-label: {
+    @apply(--arc-font-body1);
+  };
+
+  --paper-button: {
+    @apply(--arc-font-body1);
+  };
+
+  --docs-body-parameters-table-type-name: {
+    @apply(--anypoint-font-header5);
+    margin: 0;
+    padding: 0;
+  };
+
+  --raml-docs-link: {
+    @apply(--arc-font-body1);
+  };
 }
 
 </style>
