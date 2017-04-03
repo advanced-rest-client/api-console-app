@@ -128,7 +128,7 @@ the License.
         <app-header condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="arc:menu" drawer-toggle></paper-icon-button>
-            <div main-title>[[raml.title]]</div>
+            <div main-title>[[apiTitle]]</div>
             <paper-progress hidden$="[[!loadingFragment]]" indeterminate bottom-item></paper-progress>
           </app-toolbar>
         </app-header>
@@ -225,7 +225,11 @@ the License.
       // A parent endpoint of selected method object (if any).
       selectedParent: Object,
       // If not set or false then the install extension banner will be allowed to be shown.
-      noExtensionBanner: Boolean
+      noExtensionBanner: Boolean,
+      /**
+       * Title of the API found in the RAML file.
+       */
+      apiTitle: String
     },
 
     listeners: {
@@ -319,6 +323,7 @@ the License.
       if (!this._loaded) {
         return;
       }
+      this.apiTitle = '';
       this.workingState = 0;
       this._setWorking(true);
       if (this.raml) {
@@ -331,9 +336,11 @@ the License.
       this.$$('raml-js-parser')
       .loadApi(url)
       .then(function(data) {
+        var spec = data.json.specification;
+        context.apiTitle = spec.title;
         context.workingState = 1;
         context._setErrors(data.json.errors);
-        context.$$('raml-json-enhance').json = data.json.specification;
+        context.$$('raml-json-enhance').json = spec;
       })
       .catch(function(e) {
         context._toastMessage('Parser error: ' + e.message);
