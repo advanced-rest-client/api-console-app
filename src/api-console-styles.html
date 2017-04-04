@@ -39,30 +39,48 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   };
 
   --arc-font-display1: {
-    @apply(--anypoint-font-header1);
+    @apply(--arc-font-common-base);
+
+    font-size: 34px;
+    line-height: 40px;
   };
 
   --arc-font-headline: {
-    @apply(--anypoint-font-header2);
+    @apply(--arc-font-common-base);
+
+    font-weight: 100;
+    letter-spacing: -.03em;
+    font-size: 24px;
+    line-height: 32px;
   };
 
   --arc-font-title: {
-    @apply(--anypoint-font-header5);
+    @apply(--arc-font-common-base);
+    @apply(--arc-font-common-nowrap);
+
+    font-weight: 100;
+    letter-spacing: -.02em;
+    font-size: 20px;
+    line-height: 28px;
   };
 
   --arc-font-subhead: {
-    @apply(--anypoint-font-header5);
+    @apply(--arc-font-common-base);
+
     font-weight: 400;
-    margin: 0;
+    font-size: 16px;
+    line-height: 24px;
   };
 
   --arc-font-body2: {
     @apply(--anypoint-font-body);
     font-weight: 500;
+    font-size: 14px;
   };
 
   --arc-font-body1: {
     @apply(--anypoint-font-body);
+    font-size: 14px;
   };
 
   --arc-font-caption: {
@@ -87,6 +105,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 
   --arc-font-code1: {
     @apply(--anypoint-font-code);
+    font-size: 14px;
   }
 
   /* Mixin applied to all the "missing info" paragraphs. By deafult all elements this kind are the <p> elements. But it may vary. */
@@ -243,6 +262,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 
   --docs-body-parameters-table-type-name: {
     @apply(--anypoint-font-header5);
+    font-size: 16px;
     margin: 0;
     padding: 0;
   };
