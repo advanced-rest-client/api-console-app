@@ -310,11 +310,10 @@ the License.
     },
     // Sets the properties from the URL params.
     _setInitiProperties: function() {
-      if (!this.initParams) {
-        return;
-      }
-      if ('api' in this.initParams) {
+      if (this.initParams && 'api' in this.initParams) {
         this.src = this.initParams.api;
+      } else if (this.src) {
+        return this._apiSrcChanged(this.src);
       }
     },
 
