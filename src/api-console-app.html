@@ -418,10 +418,6 @@ the License.
           }, 1);
           return;
         }
-        if (this.path) {
-          // Prohibits path change if it was set in the URL.
-          return;
-        }
       }
       return this.set('path', 'summary');
     },
