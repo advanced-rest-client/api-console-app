@@ -37,65 +37,12 @@ the License.
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/api-console-ext-comm/api-console-ext-comm.html">
 <link rel="import" href="api-console-styles.html">
+<link rel="stylesheet" href="anypoint-update-styles.css">
+<link rel="stylesheet" href="fonts.css">
 
 <dom-module id="api-console-app">
+  <link rel="import" type="css" href="anypoint-update-styles.css">
   <template>
-    <style>
-     :host {
-      --app-primary-color: var(--anypoint-color-steel5, #00A2DF);
-      --app-secondary-color: black;
-      --app-header-background-front-layer: yellow;
-
-      display: block;
-    }
-
-    app-toolbar,
-    app-header {
-      background-color:  var(--app-primary-color);
-      color: #fff;
-    }
-
-    app-header paper-icon-button {
-      --paper-icon-button-ink-color: white;
-    }
-
-    .loader {
-      padding: 16px;
-      @apply(--layout-vertical);
-      @apply(--layout-center-center);
-      @apply(--layout-fit);
-      background-color: #fff;
-      z-index: 2;
-      margin-top: 64px;
-      text-align: center;
-      color: var(--anypoint-color-robustBlue3);
-      @apply(--arc-font-body1);
-    }
-
-    *[hidden] {
-      display: none !important;
-    }
-
-    paper-progress {
-      display: block;
-      width: 100%;
-      --paper-progress-active-color: rgba(255, 255, 255, 0.5);
-      --paper-progress-container-color: transparent;
-    }
-
-    iron-pages.main {
-      height: 100%;
-    }
-
-    iron-pages.main > * {
-      height: 100%;
-    }
-
-    .drawer-content-wrapper {
-      height: calc(100% - 64px); /* 64px - toolbar height */
-      overflow-y: auto;
-    }
-    </style>
     <app-location route="{{route}}"></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
     <app-route route="{{subroute}}" pattern="/:path" data="{{subrouteData}}"></app-route>
@@ -114,6 +61,7 @@ the License.
         <app-toolbar class="drawer-title">API console</app-toolbar>
         <div class="drawer-content-wrapper">
           <raml-path-selector
+            class="anypoint-side-bar"
             narrow="[[narrow]]"
             raml="[[raml]]"
             selected-path="{{path}}"

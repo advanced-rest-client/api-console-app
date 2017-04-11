@@ -1,0 +1,134 @@
+:host {
+  --app-primary-color: var(--anypoint-color-steel5, #00A2DF);
+  --app-secondary-color: black;
+  --app-header-background-front-layer: yellow;
+
+  display: block;
+}
+
+app-toolbar,
+app-header {
+  background-color:  var(--app-primary-color);
+  color: #fff;
+}
+
+app-header paper-icon-button {
+  --paper-icon-button-ink-color: white;
+}
+
+.loader {
+  padding: 16px;
+  @apply(--layout-vertical);
+  @apply(--layout-center-center);
+  @apply(--layout-fit);
+  background-color: #fff;
+  z-index: 2;
+  margin-top: 64px;
+  text-align: center;
+  color: var(--anypoint-color-robustBlue3);
+  @apply(--arc-font-body1);
+}
+
+*[hidden] {
+  display: none !important;
+}
+
+paper-progress {
+  display: block;
+  width: 100%;
+  --paper-progress-active-color: rgba(255, 255, 255, 0.5);
+  --paper-progress-container-color: transparent;
+}
+
+iron-pages.main {
+  height: 100%;
+}
+
+iron-pages.main > * {
+  height: 100%;
+}
+
+.drawer-content-wrapper {
+  height: calc(100% - 64px); /* 64px - toolbar height */
+  overflow-y: auto;
+}
+
+/* Can use /deep/ and ::shadow combinators */
+.anypoint-side-bar /deep/ .documentation {
+  padding-left: 15px;
+}
+
+.anypoint-side-bar /deep/ paper-item {
+  font-family: "Open Sans";
+  font-size: 14px;
+  line-height: 20px;
+  position: relative;
+  min-height: 24px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.anypoint-side-bar /deep/ paper-item:not(:focus):not(.selected):hover{
+  background-color: transparent;
+}
+
+.anypoint-side-bar /deep/ .indentable-content,
+.anypoint-side-bar /deep/ .section-title {
+  display: inline-flex;
+  flex-direction: row-reverse;
+
+}
+.anypoint-side-bar /deep/ .indentable-content{
+  padding-left: 10px;
+}
+.anypoint-side-bar /deep/ .section-title .toggle-button{
+  width: 24px;
+  height: 24px;
+  padding: 0;
+}
+.anypoint-side-bar /deep/ .section-title h3{
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  color: inherit;
+}
+
+.anypoint-side-bar /deep/ .selected {
+  background-color: transparent;
+  color: inherit;
+}
+
+.anypoint-side-bar /deep/ .selected:after {
+  background: #00A2DF;
+  content: "";
+  display: block;
+  width: 4px;
+  height: 32px;
+  position: absolute;
+  left: -15px;
+  top: 0;
+}
+
+.anypoint-side-bar /deep/ .method {
+  background: transparent;
+}
+.anypoint-side-bar /deep/ .selected .method.get {
+  background: inherit;
+  color: rgb(0, 128, 0);
+}
+.anypoint-side-bar /deep/ .selected .method.post{
+  background: inherit;
+  color: rgb(33, 150, 243);
+}
+.anypoint-side-bar /deep/ .selected .method.put {
+  background: inherit;
+  color: rgb(255, 165, 0);
+}
+.anypoint-side-bar /deep/ .selected .method.delete{
+  background: inherit;
+  color: rgb(244, 67, 54);
+}
+.anypoint-side-bar /deep/ .selected .method.patch {
+  background: inherit;
+  color: rgb(156, 39, 176);
+}
+
