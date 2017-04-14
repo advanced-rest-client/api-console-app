@@ -24,11 +24,11 @@ the License.
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="paper-item/paper-item.html">
 <link rel="import" href="../bower_components/raml-js-parser/raml-js-parser.html">
 <link rel="import" href="../bower_components/raml-json-enhance/raml-json-enhance.html">
 <link rel="import" href="../bower_components/raml-path-to-object/raml-path-to-object.html">
-<link rel="import" href="../bower_components/raml-path-selector/raml-path-selector.html">
+<link rel="import" href="raml-path-selector/raml-path-selector.html">
 <link rel="import" href="../bower_components/raml-aware/raml-aware.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
@@ -61,7 +61,7 @@ the License.
         <app-toolbar class="drawer-title">API console</app-toolbar>
         <div class="drawer-content-wrapper">
           <raml-path-selector
-            class="anypoint-side-bar"
+            class="anypoint-left-side-bar"
             narrow="[[narrow]]"
             raml="[[raml]]"
             selected-path="{{path}}"
@@ -85,11 +85,12 @@ the License.
             selected-object="[[selectedObject]]"
             selected-parent="[[selectedParent]]"
             path="{{path}}"></api-console-docs>
-          <api-console-request narrow="{{narrow}}" name="request" page="[[page]]"
-            selected-object="[[selectedObject]]"
-            selected-parent="[[selectedParent]]"
-            path="{{path}}"
-            no-extension-banner="[[noExtensionBanner]]"></api-console-request>
+            <api-console-request narrow="{{narrow}}" name="request" page="[[page]]"
+                                 class="anypoint-right-side-bar"
+                                 selected-object="[[selectedObject]]"
+                                 selected-parent="[[selectedParent]]"
+                                 path="{{path}}"
+                                 no-extension-banner="[[noExtensionBanner]]"></api-console-request>
           <api-console-404 name="view404"></api-console-404>
         </iron-pages>
       </app-header-layout>
