@@ -31,7 +31,7 @@ the License.
 <link rel="import" href="../bower_components/raml-path-selector/raml-path-selector.html">
 <link rel="import" href="../bower_components/raml-aware/raml-aware.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
@@ -39,10 +39,11 @@ the License.
 <link rel="import" href="api-console-styles.html">
 
 <dom-module id="api-console-app">
+  <link rel="import" type="css" href="css/spinner.css">
   <template>
     <style>
      :host {
-      --app-primary-color: var(--anypoint-color-steel5, #00A2DF);
+      --app-primary-color: var(--anypoint-color-steel5, --anypoint-primary-color);
       --app-secondary-color: black;
       --app-header-background-front-layer: yellow;
 
@@ -51,7 +52,7 @@ the License.
 
     app-toolbar,
     app-header {
-      background-color:  var(--app-primary-color);
+      background-color: var(--app-primary-color);
       color: #fff;
     }
 
@@ -101,7 +102,7 @@ the License.
     <app-route route="{{subroute}}" pattern="/:path" data="{{subrouteData}}"></app-route>
 
     <div class="loader" hidden$="[[!working]]">
-      <paper-spinner active="[[working]]"></paper-spinner>
+      <paper-spinner-lite active="[[working]]"></paper-spinner-lite>
       <iron-pages selected="[[workingState]]">
         <p>Loading RAML content.<br/>Please wait a moment...</p>
         <p>Preparing API console data.<br/>Please wait a moment...</p>
