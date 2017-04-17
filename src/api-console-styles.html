@@ -295,6 +295,17 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     border-color: var(--code-anypoint-default-button-hover);
     color: white;
   };
+
+  --paper-primary-nofill-button: {
+    @apply(--arc-font-body1);
+    border: 1px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+  };
+
+  --paper-primary-nofill-button-hover: {
+    @apply(--paper-primary-button-hover);
+  };
 }
 
 </style>
