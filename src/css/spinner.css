@@ -1,6 +1,0 @@
-paper-spinner-lite {
-  height: 80px;
-  width: 80px;
-  --paper-spinner-stroke-width: 9px;
-  --paper-spinner-color: var(--primary-color);
-}

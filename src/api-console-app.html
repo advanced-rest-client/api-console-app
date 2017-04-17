@@ -39,7 +39,6 @@ the License.
 <link rel="import" href="api-console-styles.html">
 
 <dom-module id="api-console-app">
-  <link rel="import" type="css" href="css/spinner.css">
   <template>
     <style>
      :host {
@@ -95,6 +94,13 @@ the License.
     .drawer-content-wrapper {
       height: calc(100% - 64px); /* 64px - toolbar height */
       overflow-y: auto;
+    }
+
+    paper-spinner-lite {
+      height: 80px;
+      width: 80px;
+      --paper-spinner-stroke-width: 9px;
+      --paper-spinner-color: var(--primary-color);
     }
     </style>
     <app-location route="{{route}}"></app-location>
