@@ -256,10 +256,6 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     @apply(--arc-font-body1);
   };
 
-  --paper-button: {
-    @apply(--arc-font-body1);
-  };
-
   --docs-body-parameters-table-type-name: {
     @apply(--anypoint-font-header5);
     font-size: 16px;
@@ -269,6 +265,35 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 
   --raml-docs-link: {
     @apply(--arc-font-body1);
+  };
+
+  --code-anypoint-robustblue2: #6b8a99;
+  --code-anypoint-robustblue2-hover: #7d9eae;
+
+  --code-anypoint-default-button-hover: #04b3f5;
+
+  --paper-toggle-button: {
+    @apply(--arc-font-body1);
+    border: 1px solid var(--code-anypoint-robustblue2);
+    color: var(--code-anypoint-robustblue2);
+  };
+
+  --paper-toggle-button-hover: {
+    background-color: var(--code-anypoint-robustblue2-hover);
+    border-color: var(--code-anypoint-robustblue2-hover);
+    color: white;
+  };
+
+  --paper-primary-button: {
+    @apply(--arc-font-body1);
+    border: 1px solid var(--primary-color);
+    color: white;
+  };
+
+  --paper-primary-button-hover: {
+    background-color: var(--code-anypoint-default-button-hover);
+    border-color: var(--code-anypoint-default-button-hover);
+    color: white;
   };
 }
 
