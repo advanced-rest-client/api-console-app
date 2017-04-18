@@ -24,11 +24,11 @@ the License.
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="paper-item/paper-item.html">
 <link rel="import" href="../bower_components/raml-js-parser/raml-js-parser.html">
 <link rel="import" href="../bower_components/raml-json-enhance/raml-json-enhance.html">
 <link rel="import" href="../bower_components/raml-path-to-object/raml-path-to-object.html">
-<link rel="import" href="../bower_components/raml-path-selector/raml-path-selector.html">
+<link rel="import" href="raml-path-selector/raml-path-selector.html">
 <link rel="import" href="../bower_components/raml-aware/raml-aware.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
@@ -37,6 +37,7 @@ the License.
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/api-console-ext-comm/api-console-ext-comm.html">
 <link rel="import" href="api-console-styles.html">
+<link rel="stylesheet" href="fonts.css">
 
 <dom-module id="api-console-app">
   <template>
@@ -45,63 +46,61 @@ the License.
       --app-primary-color: var(--anypoint-color-steel5, --anypoint-primary-color);
       --app-secondary-color: black;
       --app-header-background-front-layer: yellow;
+        display: block;
+      }
 
-      display: block;
-    }
+      app-toolbar,
+      app-header {
+        background-color: var(--app-primary-color);
+        color: #fff;
+      }
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
 
-    app-toolbar,
-    app-header {
-      background-color: var(--app-primary-color);
-      color: #fff;
-    }
+      .loader {
+        padding: 16px;
+        @apply(--layout-vertical);
+        @apply(--layout-center-center);
+        @apply(--layout-fit);
+        background-color: #fff;
+        z-index: 2;
+        margin-top: 64px;
+        text-align: center;
+        color: var(--anypoint-color-robustBlue3);
+        @apply(--arc-font-body1);
+      }
 
-    app-header paper-icon-button {
-      --paper-icon-button-ink-color: white;
-    }
+      *[hidden] {
+        display: none !important;
+      }
 
-    .loader {
-      padding: 16px;
-      @apply(--layout-vertical);
-      @apply(--layout-center-center);
-      @apply(--layout-fit);
-      background-color: #fff;
-      z-index: 2;
-      margin-top: 64px;
-      text-align: center;
-      color: var(--anypoint-color-robustBlue3);
-      @apply(--arc-font-body1);
-    }
+      paper-progress {
+        display: block;
+        width: 100%;
+        --paper-progress-active-color: rgba(255, 255, 255, 0.5);
+        --paper-progress-container-color: transparent;
+      }
 
-    *[hidden] {
-      display: none !important;
-    }
+      iron-pages.main {
+        height: 100%;
+      }
 
-    paper-progress {
-      display: block;
-      width: 100%;
-      --paper-progress-active-color: rgba(255, 255, 255, 0.5);
-      --paper-progress-container-color: transparent;
-    }
+      iron-pages.main > * {
+        height: 100%;
+      }
 
-    iron-pages.main {
-      height: 100%;
-    }
+      .drawer-content-wrapper {
+        height: calc(100% - 64px); /* 64px - toolbar height */
+        overflow-y: auto;
+      }
 
-    iron-pages.main > * {
-      height: 100%;
-    }
-
-    .drawer-content-wrapper {
-      height: calc(100% - 64px); /* 64px - toolbar height */
-      overflow-y: auto;
-    }
-
-    paper-spinner-lite {
-      height: 80px;
-      width: 80px;
-      --paper-spinner-stroke-width: 9px;
-      --paper-spinner-color: var(--primary-color);
-    }
+      paper-spinner-lite {
+        height: 80px;
+        width: 80px;
+        --paper-spinner-stroke-width: 9px;
+        --paper-spinner-color: var(--primary-color);
+      }
     </style>
     <app-location route="{{route}}"></app-location>
     <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
@@ -121,6 +120,7 @@ the License.
         <app-toolbar class="drawer-title">API console</app-toolbar>
         <div class="drawer-content-wrapper">
           <raml-path-selector
+            class="anypoint-left-side-bar"
             narrow="[[narrow]]"
             raml="[[raml]]"
             selected-path="{{path}}"
@@ -144,11 +144,12 @@ the License.
             selected-object="[[selectedObject]]"
             selected-parent="[[selectedParent]]"
             path="{{path}}"></api-console-docs>
-          <api-console-request narrow="{{narrow}}" name="request" page="[[page]]"
-            selected-object="[[selectedObject]]"
-            selected-parent="[[selectedParent]]"
-            path="{{path}}"
-            no-extension-banner="[[noExtensionBanner]]"></api-console-request>
+            <api-console-request narrow="{{narrow}}" name="request" page="[[page]]"
+                                 class="anypoint-right-side-bar"
+                                 selected-object="[[selectedObject]]"
+                                 selected-parent="[[selectedParent]]"
+                                 path="{{path}}"
+                                 no-extension-banner="[[noExtensionBanner]]"></api-console-request>
           <api-console-404 name="view404"></api-console-404>
         </iron-pages>
       </app-header-layout>
