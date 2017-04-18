@@ -14,7 +14,7 @@ the License.
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/raml-behaviors/raml-behavior.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../arc-icons/arc-icons.html">
+<link rel="import" href="../../bower_components/arc-icons/arc-icons.html">
 <link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="raml-resource-tree-item.html">
@@ -111,7 +111,7 @@ Custom property | Description | Default
       <div class="section-title">
         <h3 data-section="documentation" on-tap="_toggleSection">Documentation</h3>
         <paper-icon-button class="enter-button" icon="arc:chevron-right" hidden$="[[!narrow]]" data-section="documentation" on-tap="_enterSection"></paper-icon-button>
-        <paper-icon-button data-section="documentation" on-tap="_toggleSection" class$="toggle-button[[_computeToggleIconClass(documentationOpened)]]" icon="arc:arrow-drop-down"></paper-icon-button>
+        <paper-icon-button data-section="documentation" on-tap="_toggleSection" class$="toggle-button[[_computeToggleIconClass(documentationOpened)]]" icon="arc:expand-more"></paper-icon-button>
       </div>
       <iron-collapse opened="[[documentationOpened]]">
         <div>
@@ -125,7 +125,7 @@ Custom property | Description | Default
       <div class="section-title">
         <h3 data-section="types" on-tap="_toggleSection">Types</h3>
         <paper-icon-button class="enter-button" icon="arc:chevron-right" hidden$="[[!narrow]]" data-section="types" on-tap="_enterSection"></paper-icon-button>
-        <paper-icon-button data-section="types" on-tap="_toggleSection" class$="toggle-button[[_computeToggleIconClass(typesOpened)]]" icon="arc:arrow-drop-down"></paper-icon-button>
+        <paper-icon-button data-section="types" on-tap="_toggleSection" class$="toggle-button[[_computeToggleIconClass(typesOpened)]]" icon="arc:expand-more"></paper-icon-button>
       </div>
       <iron-collapse opened="[[typesOpened]]">
         <div>
@@ -139,7 +139,7 @@ Custom property | Description | Default
       <div class="section-title">
         <h3 data-section="resources" on-tap="_toggleSection">Resources</h3>
         <paper-icon-button class="enter-button" icon="arc:chevron-right" hidden$="[[!narrow]]" data-section="resources" on-tap="_enterSection"></paper-icon-button>
-        <paper-icon-button data-section="resources" on-tap="_toggleSection" class$="toggle-button[[_computeToggleIconClass(resourcesOpened)]]" icon="arc:arrow-drop-down"></paper-icon-button>
+        <paper-icon-button data-section="resources" on-tap="_toggleSection" class$="toggle-button[[_computeToggleIconClass(resourcesOpened)]]" icon="arc:expand-more"></paper-icon-button>
       </div>
       <iron-collapse opened="[[resourcesOpened]]">
         <div>
