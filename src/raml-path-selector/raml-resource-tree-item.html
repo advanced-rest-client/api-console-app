@@ -65,6 +65,7 @@ Custom property | Description | Default
     }
 
     paper-icon-button.toggle-button {
+      color: rgba(0, 0, 0, 0.54);
       transition: all 0.4s ease;
       padding: 0;
       width: 24px;
@@ -158,7 +159,7 @@ Custom property | Description | Default
     </style>
     <paper-item data-path$="[[path]]" on-tap="_selectPath" class$="indentable-content resource-details-item [[_computeItemSelectableClass(selectedPath, path)]]" title$="[[resourceTitle]]" id="resource">
       <span class="resource-name">[[_getName(resource)]]</span>
-      <paper-icon-button class="toggle-button" icon="arc:arrow-drop-down" on-tap="toggle"></paper-icon-button>
+      <paper-icon-button class="toggle-button" icon="arc:expand-more" on-tap="toggle"></paper-icon-button>
       <paper-icon-button class="enter-button" icon="arc:chevron-right" hidden$="[[!narrow]]" on-tap="_enterResource"></paper-icon-button>
     </paper-item>
     <iron-collapse id="collapse" opened="[[opened]]">
