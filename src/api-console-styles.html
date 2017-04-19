@@ -168,6 +168,18 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --raml-request-parameters-editor-subheader: {
     @apply(--arc-font-subhead);
   }
+    /*Table*/
+  --anypoint-params-table-header-background-color: transparent;
+  --anypoint-params-table-row-border-color: #e0e0e0;
+  --anypoint-params-table-header-color: #000;
+
+  --anypoint-docs-parameters-table-header: {
+    border-bottom: 3px solid #e0e0e0!important;
+  };
+
+  --anypoint-docs-parameters-table-cell: {
+    padding: 10px;
+  };
 
     /* PATH selector */
   --raml-docs-tree-item-selected-background: rgb(3, 169, 244);
@@ -229,9 +241,19 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   }
 
   /* Documentation panels */
-  --params-table-header-background-color: var(--anypoint-color-steel2, #757575);
-  --params-table-subheader-background-color: var(--anypoint-color-aluminum3, #E0E0E3);
-  --params-table-row-border-color: var(--params-table-header-background-color);
+  --params-table-header-background-color: var(--anypoint-params-table-header-background-color);
+  --params-table-subheader-background-color: var(--anypoint-params-table-header-background-color);
+  --params-table-row-border-color: var(--anypoint-params-table-row-border-color);
+  --params-table-row-subproperty-border-color: var(--anypoint-params-table-row-border-color);
+  --params-table-header-color: var(--anypoint-params-table-header-color);
+
+  --docs-parameters-table-header: {
+    @apply(--anypoint-docs-parameters-table-header);
+  };
+
+  --docs-parameters-table-cell: {
+    @apply(--anypoint-docs-parameters-table-cell);
+  };
 
   --inline-documentation-color: #1A237E;
   --raml-headers-form-docs-color: #1A237E;
