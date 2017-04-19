@@ -267,45 +267,48 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     @apply(--arc-font-body1);
   };
 
+  /* buttons */
+
   --code-anypoint-robustblue2: #6b8a99;
   --code-anypoint-robustblue2-hover: #7d9eae;
-
   --code-anypoint-default-button-hover: #04b3f5;
 
-  --paper-toggle-button: {
+  --paper-button: {
+    @apply(--anypoint-font-body);
+    font-size: 14px;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 10px 16px;
+    box-sizing: border-box;
+    text-transform: none;
+  };
+
+  --paper-button-ink-color: transparent;
+
+  --action-button {
+    @apply(--arc-font-body1);
+    border: 1px solid var(--primary-color);
+    color: white;
+  }
+
+  --action-button-hover: {
+    background: var(--code-anypoint-default-button-hover);
+  }
+
+  --toggle-button: {
     @apply(--arc-font-body1);
     border: 1px solid var(--code-anypoint-robustblue2);
     color: var(--code-anypoint-robustblue2);
-  };
+    transition: none;
+    font-weight: normal;
+  }
 
-  --paper-toggle-button-hover: {
-    background-color: var(--code-anypoint-robustblue2-hover);
-    border-color: var(--code-anypoint-robustblue2-hover);
+  --toggle-button-hover: {
+    border: 1px solid var(--code-anypoint-robustblue2-hover);
+    background: var(--code-anypoint-robustblue2-hover);
     color: white;
-  };
+  }
 
-  --paper-primary-button: {
-    @apply(--arc-font-body1);
-    border: 1px solid var(--primary-color);
-    color: white;
-  };
-
-  --paper-primary-button-hover: {
-    background-color: var(--code-anypoint-default-button-hover);
-    border-color: var(--code-anypoint-default-button-hover);
-    color: white;
-  };
-
-  --paper-primary-nofill-button: {
-    @apply(--arc-font-body1);
-    border: 1px solid var(--primary-color);
-    background: transparent;
-    color: var(--primary-color);
-  };
-
-  --paper-primary-nofill-button-hover: {
-    @apply(--paper-primary-button-hover);
-  };
 }
 
 </style>
