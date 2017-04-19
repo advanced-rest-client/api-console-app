@@ -24,7 +24,6 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --secondary-color: var(--anypoint-color-secondary, #506773);
   --primary-background-color: #fff;
   --accent-color: var(--anypoint-color-violet3, #CC143C);
-
   /* THEME */
   --arc-font-common-base: {
     @apply(--anypoint-font-common-base);
@@ -168,6 +167,30 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --raml-request-parameters-editor-subheader: {
     @apply(--arc-font-subhead);
   }
+    /* Anypoint styles */
+    /*Tabs*/
+  --anypoint-paper-tabs-content: {
+    height: calc(100% - 3px);
+    border-bottom: 3px solid rgba(39,47,51,.1);
+    font-family: Open Sans,sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #3a3b3c;
+  };
+
+  --anypoint-paper-tabs-selection-bar: {
+    border-width: 3px;
+    border-color: var(--primary-color);
+  };
+
+  --anypoint-paper-tab-content: {
+    font-weight: 400!important;
+  };
+
+  --anypoint-paper-tab-content-unselected: {
+    color: #6b6c6d;
+  };
 
     /* PATH selector */
   --raml-docs-tree-item-selected-background: rgb(3, 169, 244);
@@ -270,6 +293,23 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --raml-docs-link: {
     @apply(--arc-font-body1);
   };
+
+  --paper-tabs-selection-bar: {
+    @apply(--anypoint-paper-tabs-selection-bar);
+  };
+
+  --paper-tabs-content: {
+    @apply(--anypoint-paper-tabs-content);
+  };
+
+  --paper-tab-content: {
+    @apply(--anypoint-paper-tab-content);
+  };
+
+  --paper-tab-content-unselected: {
+    @apply(--anypoint-paper-tab-content-unselected);
+  };
+
 }
 
 </style>
