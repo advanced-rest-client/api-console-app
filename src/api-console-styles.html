@@ -20,10 +20,10 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 <style is="custom-style">
 
 :root {
-  --primary-color: var(--anypoint-color-primary, #00A2DF);
+  --primary-color: var(--anypoint-color-primary, #00a2df);
   --secondary-color: var(--anypoint-color-secondary, #506773);
   --primary-background-color: #fff;
-  --accent-color: var(--anypoint-color-violet3, #CC143C);
+  --accent-color: var(--anypoint-color-violet3, #cc143c);
 
   /* THEME */
   --arc-font-common-base: {
@@ -233,7 +233,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     background-color: transparent;
   }
   --app-drawer-content-container: {
-    background-color: var(--anypoint-color-aluminum2, #EEEEEE);
+    background-color: var(--anypoint-color-aluminum2, #eee);
   }
   --raml-docs-response-panel-docs-content: {
     padding: 8px;
@@ -255,17 +255,18 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     @apply(--anypoint-docs-parameters-table-cell);
   };
 
-  --inline-documentation-color: #1A237E;
-  --raml-headers-form-docs-color: #1A237E;
+
+  --inline-documentation-color: #1a237e;
+  --raml-headers-form-docs-color: #1a237e;
 
   --response-error-view: {
     margin-top: 24px;
   }
 
-  --code-type-text-value-color: #0D47A1;
-  --code-type-number-value-color: #03A9F4;
-  --code-type-boolean-value-color: #0288D1;
-  --code-type-null-value-color: #0288D1;
+  --code-type-text-value-color: #0d47a1;
+  --code-type-number-value-color: #03a9f4;
+  --code-type-boolean-value-color: #0288d1;
+  --code-type-null-value-color: #0288d1;
   --code-punctuation-value-color: #757575;
   --code-type-link-color: #757575;
   --code-array-index-color: rgba(1, 87, 155, 0.57);
@@ -275,10 +276,6 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --raml-docs-main-content-width: 1200px;
 
   --paper-checkbox-label: {
-    @apply(--arc-font-body1);
-  };
-
-  --paper-button: {
     @apply(--arc-font-body1);
   };
 
@@ -292,6 +289,66 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --raml-docs-link: {
     @apply(--arc-font-body1);
   };
+
+  /* buttons */
+
+  --paper-button: {
+    @apply(--anypoint-font-body);
+    font-size: 14px;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 10px 16px;
+    box-sizing: border-box;
+    text-transform: none;
+  };
+
+  --btn-danger-nofill: {
+    @apply(--arc-font-body1);
+    border: 1px solid var(--anypoint-color-danger);
+    background-color: transparent;
+    box-shadow: none;
+    color: var(--anypoint-color-danger);
+  }
+
+  --btn-danger-nofill-hover: {
+    background-color: var(--anypoint-color-danger);
+    color: white;
+  }
+
+  --paper-button-ink-color: transparent;
+
+  --toggle-button: {
+    @apply(--arc-font-body1);
+    border: 1px solid var(--anypoint-color-robustBlue2);
+    color: var(--anypoint-color-robustBlue2);
+    transition: none;
+    font-weight: normal;
+  }
+
+  --toggle-button-hover: {
+    border: 1px solid var(--anypoint-color-robustBlue1);
+    background: var(--anypoint-color-robustBlue1);
+    color: white;
+  }
+
+  --action-button: {
+    background-color: var(--primary-color);
+    color: var(--primary-action-color, #fff);
+  }
+
+  --action-button-hover: {
+    background-color: var(--anypoint-color-coreBlue2);
+    color: white;
+  }
+
+  --auth-button: {
+    @apply(--btn-danger-nofill);
+  }
+
+  --auth-button-hover: {
+    @apply(--btn-danger-nofill-hover);
+  }
+
 }
 
 </style>
