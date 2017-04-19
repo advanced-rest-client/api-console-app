@@ -25,11 +25,6 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   --primary-background-color: #fff;
   --accent-color: var(--anypoint-color-violet3, #cc143c);
 
-  --anypoint-robustblue2: #6b8a99;
-  --anypoint-danger: #d93351;
-  --anypoint-robustblue2-hover: #7d9eae;
-  --anypoint-default-button-hover: #04b3f5;
-
   /* THEME */
   --arc-font-common-base: {
     @apply(--anypoint-font-common-base);
@@ -286,14 +281,14 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 
   --btn-danger-nofill: {
     @apply(--arc-font-body1);
-    border: 1px solid var(--anypoint-danger);
+    border: 1px solid var(--anypoint-color-danger);
     background-color: transparent;
     box-shadow: none;
-    color: var(--anypoint-danger);
+    color: var(--anypoint-color-danger);
   }
 
   --btn-danger-nofill-hover: {
-    background-color: var(--anypoint-danger);
+    background-color: var(--anypoint-color-danger);
     color: white;
   }
 
@@ -301,15 +296,20 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
 
   --toggle-button: {
     @apply(--arc-font-body1);
-    border: 1px solid var(--anypoint-robustblue2);
-    color: var(--anypoint-robustblue2);
+    border: 1px solid var(--anypoint-color-robustBlue2);
+    color: var(--anypoint-color-robustBlue2);
     transition: none;
     font-weight: normal;
   }
 
   --toggle-button-hover: {
-    border: 1px solid var(--anypoint-robustblue2-hover);
-    background: var(--anypoint-robustblue2-hover);
+    border: 1px solid var(--anypoint-color-robustBlue1);
+    background: var(--anypoint-color-robustBlue1);
+    color: white;
+  }
+
+  --action-button-hover: {
+    background-color: var(--anypoint-color-coreBlue2);
     color: white;
   }
 
