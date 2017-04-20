@@ -322,6 +322,8 @@ the License.
       }
       if ('api' in this.initParams) {
         this.src = this.initParams.api;
+      } else if (this.src) {
+        return this._apiSrcChanged(this.src);
       }
     },
 
