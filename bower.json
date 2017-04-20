@@ -32,9 +32,17 @@
     "fetch-polyfill": "advanced-rest-client/fetch-polyfill#^0.1.1",
     "api-console-ext-comm": "advanced-rest-client/api-console-ext-comm#^0.1.1",
     "anypoint-styles": "advanced-rest-client/anypoint-styles#^0.1.2",
-    "iron-demo-helpers": "^1.2.5"
+    "iron-demo-helpers": "^1.2.5",
+
+
+    "auth-methods": "advanced-rest-client/auth-methods#anypoint",
+    "raml-request-parameters-editor": "advanced-rest-client/raml-request-parameters-editor#anypoint"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
+  },
+  "resolutions": {
+    "auth-methods": "anypoint",
+    "raml-request-parameters-editor": "anypoint"
   }
 }
