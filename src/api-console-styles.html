@@ -357,12 +357,14 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
   }
 
   --paper-button-ink-color: transparent;
+  --paper-icon-button-ink-color: transparent;
 
   --toggle-button: {
     @apply(--arc-font-body1);
     border: 1px solid var(--anypoint-color-robustBlue2);
     color: var(--anypoint-color-robustBlue2);
     transition: none;
+    margin-right: 0;
     font-weight: normal;
   }
 
@@ -390,6 +392,9 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     @apply(--btn-danger-nofill-hover);
   }
 
+  --title-area-actions: {
+    margin-right: 12px;
+  }
 
 }
 
