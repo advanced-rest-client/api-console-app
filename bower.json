@@ -33,9 +33,12 @@
     "api-console-ext-comm": "advanced-rest-client/api-console-ext-comm#^0.1.1",
     "anypoint-styles": "advanced-rest-client/anypoint-styles#^0.1.2",
     "iron-demo-helpers": "^1.2.5",
-
-
     "auth-methods": "advanced-rest-client/auth-methods#anypoint",
+    "raml-request-parameters-editor": "advanced-rest-client/raml-request-parameters-editor#anypoint",
+    "oauth2-scope-selector": "advanced-rest-client/oauth2-scope-selector#anypoint",
+    "authorization-panel": "advanced-rest-client/authorization-panel#anypoint",
+    "raml-headers-form": "advanced-rest-client/raml-headers-form#anypoint",
+    "raml-request-headers-editor": "advanced-rest-client/raml-request-headers-editor#anypoint",
     "raml-request-parameters-editor": "advanced-rest-client/raml-request-parameters-editor#anypoint"
   },
   "devDependencies": {
@@ -43,6 +46,11 @@
   },
   "resolutions": {
     "auth-methods": "anypoint",
+    "raml-request-parameters-editor": "anypoint",
+    "oauth2-scope-selector": "anypoint",
+    "authorization-panel": "anypoint",
+    "raml-headers-form": "anypoint",
+    "raml-request-headers-editor": "anypoint",
     "raml-request-parameters-editor": "anypoint"
   }
 }

@@ -175,10 +175,6 @@ The request panel in the console app.
         'api-console-response-ready': '_onResponseReady'
       },
 
-      attached: function() {
-        this.listen(window, 'api-console-extension-installed', '_onExtensionInstalled');
-      },
-
       ready: function() {
         this._setRedirectUrl();
         this._initExtensionBanner();
