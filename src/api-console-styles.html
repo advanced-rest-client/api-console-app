@@ -221,7 +221,7 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     margin-left: 16px;
   }
   --request-form-panels: {
-    margin: 12px 16px;
+    margin: 0 0 12px 16px;
   }
   --raml-request-url-editor: {
     @apply(--request-form-panels);
@@ -390,6 +390,23 @@ It is a Polymer's custom style element. It will propagate variables and mixins o
     @apply(--btn-danger-nofill-hover);
   }
 
+  --raml-docs-resource-viewer-navigation-wide-layout: {
+    background-color: var(--anypoint-color-aluminum2);
+    margin: 0;
+    border-left: 0;
+  }
+
+  --sidebar-list: {
+  }
+
+  --sidebar-list-link: {
+    @apply(--arc-font-body1);
+    padding: 10px 12px;
+  }
+
+  --sidebar-list-link-hover: {
+    color: var(--anypoint-color-coreBlue2);
+  }
 
 }
 
