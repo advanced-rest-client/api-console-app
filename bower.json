@@ -32,17 +32,20 @@
     "fetch-polyfill": "advanced-rest-client/fetch-polyfill#^0.1.1",
     "api-console-ext-comm": "advanced-rest-client/api-console-ext-comm#^0.1.1",
     "anypoint-styles": "advanced-rest-client/anypoint-styles#^0.1.2",
-    "iron-demo-helpers": "^1.2.5",
-    "auth-methods": "advanced-rest-client/auth-methods#anypoint",
-    "raml-request-parameters-editor": "advanced-rest-client/raml-request-parameters-editor#anypoint",
+
+
     "oauth2-scope-selector": "advanced-rest-client/oauth2-scope-selector#anypoint",
     "authorization-panel": "advanced-rest-client/authorization-panel#anypoint",
+    "raml-path-selector": "advanced-rest-client/raml-path-selector#anypoint",
+    "auth-methods": "advanced-rest-client/auth-methods#anypoint",
+    "raml-request-parameters-editor": "advanced-rest-client/raml-request-parameters-editor#anypoint",
     "raml-headers-form": "advanced-rest-client/raml-headers-form#anypoint",
     "raml-request-headers-editor": "advanced-rest-client/raml-request-headers-editor#anypoint",
-    "raml-request-parameters-editor": "advanced-rest-client/raml-request-parameters-editor#anypoint"
+    "raml-body-editor-panel": "advanced-rest-client/raml-body-editor-panel#anypoint"
   },
   "devDependencies": {
-    "web-component-tester": "^4.0.0"
+    "web-component-tester": "^4.0.0",
+    "iron-demo-helpers": "^1.2.5"
   },
   "resolutions": {
     "auth-methods": "anypoint",
@@ -51,6 +54,7 @@
     "authorization-panel": "anypoint",
     "raml-headers-form": "anypoint",
     "raml-request-headers-editor": "anypoint",
-    "raml-request-parameters-editor": "anypoint"
+    "raml-path-selector": "anypoint",
+    "raml-body-editor-panel": "anypoint"
   }
 }
