@@ -16,7 +16,7 @@ When this task are performed the documentation will be displayed as in the
 ## Using the console
 The API Console can be used either as a HTML element (Web Components) or as a standalone application.
 
-**To use the API console as a HTML element** refer to the [api-console element](https://github.com/advanced-rest-client/api-console) repository for detailed usage.
+**To use the API console as a HTML element** refer to the [api-console element](https://github.com/mulesoft/api-console/tree/release/4.0.0) repository for detailed usage.
 
 Otherwise use following directions.
 
@@ -41,7 +41,26 @@ npm install && bower install
 ```
 npm install -g polymer-cli
 ```
-3. Build the console
+4. Run the console
+```
+polymer serve --open -p 8080
+```
+
+When the website opens, it will load a default RAML file that is hard coded in the `index.html` as an attribute for the `api-console-app` elerment:
+
+```html
+<api-console-app src="https://cdn.rawgit.com/advanced-rest-client/drive-raml-api-v2/ab60ed28/api.raml"></api-console-app>
+```
+
+You can change it to different file or you can add the `api` query parameter that points to a RAML file.
+```
+http://localhost:8080/?api=https://cdn.rawgit.com/advanced-rest-client/drive-raml-api-v2/ab60ed28/api.raml
+```
+
+## Building the application
+
+To build a working API Console application use following command:
+
 ```
 polymer build
 ```
@@ -56,17 +75,6 @@ the parser, RAML JavaScript enhancer and the documentation viewer.
 Second fragment is the HTTP request and response panels that will be downloaded
 when the user request them for the first time.
 
-
-To test the app locally user `polymer` tools to run dev server:
-```
-polymer serve --open -p 8080
-```
-
-When the website opens, add the `api` query parameter that points to the RAML
-file.
-```
-http://localhost:8080/?api=https://cdn.rawgit.com/advanced-rest-client/drive-raml-api-v2/ab60ed28/api.raml
-```
 
 ## Deep linking
 The application supports deep linking. It means that you can link to the documentation to specific resource / method / type documentation.
