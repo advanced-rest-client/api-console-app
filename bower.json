@@ -37,7 +37,8 @@
     "auth-methods": "advanced-rest-client/auth-methods#anypoint",
     "raml-request-parameters-editor": "advanced-rest-client/raml-request-parameters-editor#anypoint",
     "raml-headers-form": "advanced-rest-client/raml-headers-form#anypoint",
-    "raml-request-headers-editor": "advanced-rest-client/raml-request-headers-editor#anypoint"
+    "raml-request-headers-editor": "advanced-rest-client/raml-request-headers-editor#anypoint",
+    "raml-body-editor-panel": "advanced-rest-client/raml-body-editor-panel#anypoint"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0",
@@ -48,6 +49,7 @@
     "raml-request-parameters-editor": "anypoint",
     "raml-headers-form": "anypoint",
     "raml-request-headers-editor": "anypoint",
-    "raml-path-selector": "anypoint"
+    "raml-path-selector": "anypoint",
+    "raml-body-editor-panel": "anypoint"
   }
 }
