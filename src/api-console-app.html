@@ -317,11 +317,10 @@ the License.
     },
     // Sets the properties from the URL params.
     _setInitiProperties: function() {
-      if (!this.initParams) {
-        return;
-      }
-      if ('api' in this.initParams) {
+      if (this.initParams && 'api' in this.initParams) {
         this.src = this.initParams.api;
+      } else if (this.src) {
+        return this._apiSrcChanged(this.src);
       }
     },
 
@@ -423,10 +422,6 @@ the License.
             this.set('route.path', this.__initRoute);
             this.__initRoute = undefined;
           }, 1);
-          return;
-        }
-        if (this.path) {
-          // Prohibits path change if it was set in the URL.
           return;
         }
       }
