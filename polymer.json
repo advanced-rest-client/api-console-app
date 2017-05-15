@@ -6,16 +6,15 @@
     "src/docs.html",
     "src/view404.html"
   ],
-  "sourceGlobs": [
+  "sources": [
    "src/**/*",
    "images/**/*",
    "bower.json"
   ],
-  "includeDependencies": [
+  "extraDependencies": [
     "manifest.json",
     "bower_components/webcomponentsjs/webcomponents-lite.min.js",
     "bower_components/codemirror/mode/javascript/**.js ",
-    "bower_components/arc-definitions/definitions.json",
     "bower_components/oauth-authorization/oauth-popup.html",
     "bower_components/xml-viewer/workers/**.js",
     "bower_components/response-body-view/html-preview.html",
@@ -30,5 +29,15 @@
     "bower_components/prism/*",
     "bower_components/prism/**",
     "bower_components/code-mirror/styles/*"
-  ]
+  ],
+  "builds": [{
+    "preset": "es5-bundled",
+    "name": "bundled"
+  },{
+    "preset": "es6-unbundled",
+    "name": "unbundled"
+  }],
+  "lint": {
+    "rules": ["polymer-1"]
+  }
 }
