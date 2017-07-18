@@ -42,7 +42,7 @@ the License.
   <template>
     <style>
      :host {
-      --app-primary-color: var(--anypoint-color-steel5, --anypoint-primary-color);
+      --app-primary-color: var(--primary-color, #00A2DF);
       --app-secondary-color: black;
       --app-header-background-front-layer: yellow;
 
@@ -51,7 +51,7 @@ the License.
 
     app-toolbar,
     app-header {
-      background-color: var(--app-primary-color);
+      background-color: #121314;
       color: #fff;
     }
 
@@ -68,7 +68,6 @@ the License.
       z-index: 2;
       margin-top: 64px;
       text-align: center;
-      color: var(--anypoint-color-robustBlue3);
       @apply(--arc-font-body1);
     }
 
